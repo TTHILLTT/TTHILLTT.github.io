@@ -1,16 +1,35 @@
 <!DOCTYPE html>
 <html lang="zh_cn">
 <head>
-  <meta charset="UTF-8">
-  <title>Welcome!</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <title>Welcome!</title>
 </head>
-<body style="background-image: url(/images/dirt.png)">
-  <h1 style="text-align:center"><strong>你好!</strong></h1>
-  <h2 style="text-align:center">这是<strong>TTHILLTT</strong>的网站</h2>
-  <h3 style="text-align:center">或许你可以在<a href="https://github.com/TTHILLTT">GitHub</a>上关注我!给我的项目发几个PR什么的!</h3>
-  <h4 style="text-align:center">这是我的<a href="/pages/socialMedias.html">联系方式</a>:</h4>
-  <h1 style="text-align:center"><strong><a href="/pages/NGGYU.html">千万别点</a> </strong></h1>
-  <iframe width="640" height="720" src="https://www.runoob.com/html/html-tutorial.html" style="text-align:center">Thanks!</iframe>
-  <iframe width="960" height="720" src="https://myworldzycpc.top" style="text-align:center">Thanks!</iframe>
+<body style="background-image: url(/images/dirt.png); background-size: 100px; image-rendering: pixelated; margin-bottom: 50px;">
+<div class="container" style="background-color: rgba(255,255,255,0.5); padding: 20px; border-radius: 10px; margin-top: 50px; -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+    <div class="jumbotron" style="background-color: rgba(255,255,255,0.3); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);">
+        <h1 style="text-align: center"><strong>你好!</strong></h1>
+        <h2 style="text-align: center">这是<strong>TTHILLTT</strong>的网站</h2>
+    </div>
+    <h3 style="text-align: center">
+        或许你可以在<a href="https://github.com/TTHILLTT">GitHub</a>上关注我!给我的项目发几个PR什么的!
+    </h3>
+    <h4 style="text-align: center">这是我的<a href="/pages/socialMedias.html">联系方式</a></h4>
+    <p style="text-align: center">
+        <a class="btn btn-primary btn-lg" href="/pages/NGGYU.html"><strong>千万别点</strong></a>
+    </p>
+    <div class="row" style="margin-top: 50px;">
+        <div class="col-md-6">
+            <iframe class="img img-responsive img-thumbnail" src="https://www.runoob.com/html/html-tutorial.html" style="text-align:center; width:100%; height:500px;">
+                Thanks!
+            </iframe>
+        </div>
+        <div class="col-md-6">
+            <iframe class="img img-responsive img-thumbnail" width="960" height="720" src="https://myworldzycpc.top" style="text-align:center; width:100%; height:500px;">
+                Thanks!
+            </iframe>
+        </div>
+    </div>
+</div>
 </body>
 </html>
