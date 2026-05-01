@@ -1,13 +1,71 @@
 <!DOCTYPE html>
-<html lang="zh_cn">
+<html lang="zh_cn" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <title>都说了别点,愿者上钩</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles/win11.css">
+  <script>var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);</script>
+  <title>都说了别点，愿者上钩</title>
 </head>
 <body>
-  <video autoplay width=100% height=100% src="/images/NGGYU.mp4" controls></video>
-<!--  <script>-->
-    // document.body.requestFullscreen()
-<!--  </script>-->
+
+<div class="desktop"></div>
+
+<main class="content-overlay">
+  <div class="window window-wide">
+    <div class="titlebar">
+      <div class="titlebar-left">
+        <span class="titlebar-app-icon">🎵</span>
+        <span class="titlebar-text">Media Player</span>
+      </div>
+      <div class="titlebar-controls">
+        <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
+        <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
+        <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+      </div>
+    </div>
+    <div class="window-body window-body-tight">
+      <div class="video-container">
+        <video autoplay src="../images/NGGYU.mp4" controls></video>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="taskbar">
+  <div class="taskbar-center">
+    <a class="taskbar-icon" href="../index.html" title="Home">🏠</a>
+    <a class="taskbar-icon" href="https://github.com/TTHILLTT" title="GitHub" target="_blank" rel="noopener">🐙</a>
+    <a class="taskbar-icon" href="../pages/socialMedias.html" title="Contact">💬</a>
+    <a class="taskbar-icon active" href="../pages/NGGYU.html" title="NGGYU">⚠️</a>
+    <a class="taskbar-icon" href="../pages/tools.html" title="Tools">🧰</a>
+  </div>
+  <div class="taskbar-right">
+    <button type="button" class="theme-toggle" id="themeToggle" title="切换深浅色模式" aria-label="切换深浅色模式">☀️</button>
+    <span id="clock"></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+    var theme = document.documentElement.getAttribute('data-theme');
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+})();
+document.getElementById('themeToggle').addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    this.textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', next);
+});
+(function tick() {
+    var d = new Date();
+    document.getElementById('clock').textContent =
+        d.toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'}) + '  ' +
+        d.toLocaleDateString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit'});
+    requestAnimationFrame(function(){ setTimeout(tick, 1000 - Date.now() % 1000); });
+})();
+</script>
 </body>
 </html>

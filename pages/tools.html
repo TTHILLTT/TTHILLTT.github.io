@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh_cn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles/win11.css">
+  <script>var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);</script>
+  <title>有用的工具</title>
+</head>
+<body>
+
+<div class="desktop"></div>
+
+<main class="content-overlay">
+  <div class="window window-wide">
+    <div class="titlebar">
+      <div class="titlebar-left">
+        <span class="titlebar-app-icon">🧰</span>
+        <span class="titlebar-text">有用的工具</span>
+      </div>
+      <div class="titlebar-controls">
+        <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
+        <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
+        <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+      </div>
+    </div>
+    <div class="window-body" style="max-height:72vh; overflow-y:auto; padding:20px 24px;">
+
+      <div class="tools-grid">
+
+        <!-- 1. ISO-8859-1 Mojibake -->
+        <div class="tool-card">
+          <h3>📝 ISO-8859-1 乱码解码</h3>
+          <label>输入乱码文本</label>
+          <textarea id="mojiIn" rows="2" placeholder='例如: ä½ å¥½'></textarea>
+          <div class="btn-row">
+            <button type="button" class="btn-sm accent" onclick="mojiDecode()">解码 →</button>
+            <button type="button" class="btn-sm" onclick="mojiEncode()">← 编码</button>
+          </div>
+          <label style="margin-top:8px;">结果</label>
+          <div class="result" id="mojiOut"></div>
+        </div>
+
+        <!-- 2. URL Encode/Decode -->
+        <div class="tool-card">
+          <h3>🔗 URL 编码/解码</h3>
+          <label>输入文本</label>
+          <textarea id="urlIn" rows="2" placeholder="输入要编码或解码的文本"></textarea>
+          <div class="btn-row">
+            <button type="button" class="btn-sm accent" onclick="urlEncode()">编码 →</button>
+            <button type="button" class="btn-sm" onclick="urlDecode()">← 解码</button>
+          </div>
+          <label style="margin-top:8px;">结果</label>
+          <div class="result" id="urlOut"></div>
+        </div>
+
+        <!-- 3. Base64 Encode/Decode -->
+        <div class="tool-card">
+          <h3>🔐 Base64 编码/解码</h3>
+          <label>输入文本</label>
+          <textarea id="b64In" rows="2" placeholder="输入要编码或解码的文本"></textarea>
+          <div class="btn-row">
+            <button type="button" class="btn-sm accent" onclick="b64Encode()">编码 →</button>
+            <button type="button" class="btn-sm" onclick="b64Decode()">← 解码</button>
+          </div>
+          <label style="margin-top:8px;">结果</label>
+          <div class="result" id="b64Out"></div>
+        </div>
+
+        <!-- 4. Unicode / Chinese -->
+        <div class="tool-card">
+          <h3>🔤 Unicode 与中文 编码/解码</h3>
+          <label>输入</label>
+          <textarea id="uniIn" rows="2" placeholder="输入中文 或 \uXXXX 格式的 Unicode"></textarea>
+          <div class="btn-row">
+            <button type="button" class="btn-sm accent" onclick="uniEncode()">编码 → \uXXXX</button>
+            <button type="button" class="btn-sm" onclick="uniDecode()">← 解码</button>
+          </div>
+          <label style="margin-top:8px;">结果</label>
+          <div class="result" id="uniOut"></div>
+        </div>
+
+        <!-- 5. IEEE 754 Float -->
+        <div class="tool-card">
+          <h3>🔢 IEEE 754 浮点数转换</h3>
+          <div class="inline-row" style="margin-bottom:8px;">
+            <select id="floatPrec" style="flex:0 0 auto; width:auto;">
+              <option value="32">32-bit (float)</option>
+              <option value="64">64-bit (double)</option>
+            </select>
+          </div>
+          <label>十进制数</label>
+          <input type="text" id="floatDec" placeholder="例如: 3.14 或 -0.5">
+          <div class="btn-row">
+            <button type="button" class="btn-sm accent" onclick="floatToHex()">→ 十六进制</button>
+            <button type="button" class="btn-sm" onclick="hexToFloat()">← 浮点数</button>
+          </div>
+          <label style="margin-top:8px;">十六进制</label>
+          <input type="text" id="floatHex" placeholder="例如: 4048F5C3">
+          <div class="result" id="floatDetail" style="margin-top:6px;"></div>
+        </div>
+
+        <!-- 6. Number Base Conversion -->
+        <div class="tool-card">
+          <h3>🔣 进制转换</h3>
+          <div class="inline-row" style="margin-bottom:8px;">
+            <label style="flex:0 0 auto;">从:</label>
+            <select id="baseFrom" style="width:auto;">
+              <option value="2">二进制</option>
+              <option value="8">八进制</option>
+              <option value="10" selected>十进制</option>
+              <option value="16">十六进制</option>
+            </select>
+          </div>
+          <input type="text" id="baseIn" placeholder="输入数值">
+          <button type="button" class="btn-sm accent" onclick="baseConvert()" style="margin-top:8px;">转换</button>
+          <div style="margin-top:8px;">
+            <label>二进制</label><div class="result" id="base2"></div>
+            <label>八进制</label><div class="result" id="base8"></div>
+            <label>十进制</label><div class="result" id="base10"></div>
+            <label>十六进制</label><div class="result" id="base16"></div>
+          </div>
+        </div>
+
+        <!-- 7. 原码/反码/补码 -->
+        <div class="tool-card">
+          <h3>🧮 原码/反码/补码 计算器</h3>
+          <div class="inline-row" style="margin-bottom:8px;">
+            <input type="number" id="signedVal" placeholder="输入整数" style="flex:2;">
+            <label style="flex:0 0 auto;">位宽:</label>
+            <select id="signedBits" style="width:auto;">
+              <option value="8">8</option>
+              <option value="16">16</option>
+              <option value="32" selected>32</option>
+            </select>
+          </div>
+          <button type="button" class="btn-sm accent" onclick="calcSigned()">计算</button>
+          <div style="margin-top:8px;">
+            <label>原码 (Sign-Magnitude)</label><div class="result" id="smResult"></div>
+            <label>反码 (Ones' Complement)</label><div class="result" id="ocResult"></div>
+            <label>补码 (Two's Complement)</label><div class="result" id="tcResult"></div>
+          </div>
+        </div>
+
+        <!-- 8. chmod Calculator -->
+        <div class="tool-card">
+          <h3>🔒 chmod 计算器</h3>
+          <table class="chmod-grid">
+            <tr><td></td><td class="head">Owner</td><td class="head">Group</td><td class="head">Other</td></tr>
+            <tr><td class="head">Read</td>
+              <td><input type="checkbox" id="cr0" onchange="chmodUpdate()" checked></td>
+              <td><input type="checkbox" id="cr1" onchange="chmodUpdate()" checked></td>
+              <td><input type="checkbox" id="cr2" onchange="chmodUpdate()" checked></td></tr>
+            <tr><td class="head">Write</td>
+              <td><input type="checkbox" id="cw0" onchange="chmodUpdate()" checked></td>
+              <td><input type="checkbox" id="cw1" onchange="chmodUpdate()"></td>
+              <td><input type="checkbox" id="cw2" onchange="chmodUpdate()"></td></tr>
+            <tr><td class="head">Exec</td>
+              <td><input type="checkbox" id="cx0" onchange="chmodUpdate()"></td>
+              <td><input type="checkbox" id="cx1" onchange="chmodUpdate()"></td>
+              <td><input type="checkbox" id="cx2" onchange="chmodUpdate()"></td></tr>
+          </table>
+          <div class="inline-row" style="margin-top:8px;">
+            <input type="text" id="chmodNum" placeholder="例如: 755" oninput="chmodFromNum()" style="flex:1;">
+            <span class="fixed" style="font-weight:600;" id="chmodSym">rwxr-xr-x</span>
+          </div>
+        </div>
+
+        <!-- 9. PPI Calculator -->
+        <div class="tool-card">
+          <h3>📱 屏幕 PPI 计算器</h3>
+          <div class="inline-row">
+            <input type="number" id="ppiW" placeholder="水平像素" value="1920">
+            <span class="fixed">×</span>
+            <input type="number" id="ppiH" placeholder="垂直像素" value="1080">
+          </div>
+          <label style="margin-top:8px;">屏幕尺寸 (英寸)</label>
+          <input type="number" id="ppiSize" placeholder="例如: 24" value="24" step="0.1">
+          <button type="button" class="btn-sm accent" onclick="calcPPI()" style="margin-top:8px;">计算</button>
+          <div class="result" id="ppiResult" style="margin-top:8px;"></div>
+        </div>
+
+        <!-- 10. IPv4 to IPv6 -->
+        <div class="tool-card">
+          <h3>🌐 IPv4 转 IPv6</h3>
+          <label>IPv4 地址</label>
+          <input type="text" id="ipv4In" placeholder="例如: 192.168.1.1">
+          <button type="button" class="btn-sm accent" onclick="ipv4to6()" style="margin-top:8px;">转换</button>
+          <label style="margin-top:8px;">IPv4-mapped IPv6</label>
+          <div class="result" id="ipv6Out"></div>
+          <label>完整 IPv6</label>
+          <div class="result" id="ipv6Full"></div>
+        </div>
+
+        <!-- 11. RMB Uppercase -->
+        <div class="tool-card">
+          <h3>💴 人民币大写转换</h3>
+          <label>金额 (数字)</label>
+          <input type="text" id="rmbIn" placeholder="例如: 12345.67">
+          <button type="button" class="btn-sm accent" onclick="rmbConvert()" style="margin-top:8px;">转换</button>
+          <label style="margin-top:8px;">大写</label>
+          <div class="result" id="rmbOut"></div>
+        </div>
+
+        <!-- 12. Unit Conversion -->
+        <div class="tool-card">
+          <h3>📏 单位换算</h3>
+          <select id="unitCat" onchange="unitCatChange()">
+            <option value="length">长度</option>
+            <option value="weight">重量</option>
+            <option value="temp">温度</option>
+            <option value="area">面积</option>
+            <option value="volume">体积</option>
+            <option value="speed">速度</option>
+          </select>
+          <div class="inline-row" style="margin-top:8px;">
+            <input type="number" id="unitVal" placeholder="数值" value="1">
+            <select id="unitFrom"></select>
+            <span class="fixed">→</span>
+            <select id="unitTo"></select>
+          </div>
+          <div class="result" id="unitResult" style="margin-top:8px;"></div>
+        </div>
+
+        <!-- 13. MD5 Hash -->
+        <div class="tool-card">
+          <h3>🔑 MD5 Hash</h3>
+          <label>输入文本</label>
+          <textarea id="md5In" rows="2" placeholder="输入要计算 MD5 的文本"></textarea>
+          <button type="button" class="btn-sm accent" onclick="calcMD5()" style="margin-top:8px;">计算 MD5</button>
+          <label style="margin-top:8px;">MD5 (小写)</label>
+          <div class="result" id="md5Lower"></div>
+          <label>MD5 (大写)</label>
+          <div class="result" id="md5Upper"></div>
+        </div>
+
+      </div><!-- .tools-grid -->
+
+    </div>
+  </div>
+</main>
+
+<footer class="taskbar">
+  <div class="taskbar-center">
+    <a class="taskbar-icon" href="../index.html" title="Home">🏠</a>
+    <a class="taskbar-icon" href="https://github.com/TTHILLTT" title="GitHub" target="_blank" rel="noopener">🐙</a>
+    <a class="taskbar-icon" href="../pages/socialMedias.html" title="Contact">💬</a>
+    <a class="taskbar-icon" href="../pages/NGGYU.html" title="NGGYU">⚠️</a>
+    <a class="taskbar-icon active" href="../pages/tools.html" title="Tools">🧰</a>
+  </div>
+  <div class="taskbar-right">
+    <button type="button" class="theme-toggle" id="themeToggle" title="切换深浅色模式" aria-label="切换深浅色模式">☀️</button>
+    <span id="clock"></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+    var theme = document.documentElement.getAttribute('data-theme');
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+})();
+document.getElementById('themeToggle').addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    this.textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', next);
+});
+(function tick() {
+    var d = new Date();
+    document.getElementById('clock').textContent =
+        d.toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'}) + '  ' +
+        d.toLocaleDateString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit'});
+    requestAnimationFrame(function(){ setTimeout(tick, 1000 - Date.now() % 1000); });
+})();
+
+/* ========== 1. ISO-8859-1 Mojibake ========== */
+function mojiDecode(){
+  var s = document.getElementById('mojiIn').value;
+  try {
+    var bytes = new Uint8Array(s.length);
+    for (var i=0; i<s.length; i++) bytes[i] = s.charCodeAt(i) & 0xFF;
+    document.getElementById('mojiOut').textContent = new TextDecoder('utf-8').decode(bytes);
+  } catch(e){ document.getElementById('mojiOut').textContent = '解码失败: ' + e.message; }
+}
+function mojiEncode(){
+  var s = document.getElementById('mojiIn').value;
+  var bytes = new TextEncoder().encode(s);
+  var out = '';
+  for (var i=0; i<bytes.length; i++) out += String.fromCharCode(bytes[i]);
+  document.getElementById('mojiOut').textContent = out;
+}
+
+/* ========== 2. URL Encode/Decode ========== */
+function urlEncode(){
+  document.getElementById('urlOut').textContent = encodeURIComponent(document.getElementById('urlIn').value);
+}
+function urlDecode(){
+  try {
+    document.getElementById('urlOut').textContent = decodeURIComponent(document.getElementById('urlIn').value);
+  } catch(e){ document.getElementById('urlOut').textContent = '解码失败: ' + e.message; }
+}
+
+/* ========== 3. Base64 ========== */
+function b64Encode(){
+  try {
+    var bytes = new TextEncoder().encode(document.getElementById('b64In').value);
+    var bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    document.getElementById('b64Out').textContent = btoa(bin);
+  } catch(e){ document.getElementById('b64Out').textContent = '编码失败: ' + e.message; }
+}
+function b64Decode(){
+  try {
+    var bin = atob(document.getElementById('b64In').value.trim());
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    document.getElementById('b64Out').textContent = new TextDecoder().decode(bytes);
+  } catch(e){ document.getElementById('b64Out').textContent = '解码失败 (检查输入是否为有效 Base64)'; }
+}
+
+/* ========== 4. Unicode / Chinese ========== */
+function uniEncode(){
+  var s = document.getElementById('uniIn').value;
+  var out = '';
+  for (var i=0; i<s.length; i++){
+    var c = s.charCodeAt(i);
+    if (c > 127) out += '\\u' + ('0000' + c.toString(16)).slice(-4);
+    else out += s[i];
+  }
+  document.getElementById('uniOut').textContent = out;
+}
+function uniDecode(){
+  var s = document.getElementById('uniIn').value;
+  s = s.replace(/\\u([0-9a-fA-F]{4})/g, function(_,h){ return String.fromCharCode(parseInt(h,16)); });
+  s = s.replace(/&#x([0-9a-fA-F]+);/g, function(_,h){ return String.fromCharCode(parseInt(h,16)); });
+  s = s.replace(/&#(\d+);/g, function(_,d){ return String.fromCharCode(parseInt(d,10)); });
+  document.getElementById('uniOut').textContent = s;
+}
+
+/* ========== 5. IEEE 754 Float ========== */
+function floatToHex(){
+  var val = parseFloat(document.getElementById('floatDec').value);
+  var prec = parseInt(document.getElementById('floatPrec').value);
+  var hex = '', detail = '';
+  if (isNaN(val)) { document.getElementById('floatHex').value = '无效数值'; return; }
+  if (prec === 32){
+    var buf = new ArrayBuffer(4); var f = new Float32Array(buf); var u = new Uint32Array(buf);
+    f[0] = val;
+    hex = u[0].toString(16).toUpperCase().padStart(8,'0');
+    var sign = (u[0] >>> 31) & 1;
+    var exp = (u[0] >>> 23) & 0xFF;
+    var mant = u[0] & 0x7FFFFF;
+    detail = '符号: ' + sign + ' | 指数: ' + exp + ' (实际 ' + (exp - 127) + ') | 尾数: 0x' + mant.toString(16).toUpperCase().padStart(6,'0');
+  } else {
+    var buf = new ArrayBuffer(8); var f = new Float64Array(buf); var u = new BigUint64Array(buf);
+    f[0] = val;
+    hex = u[0].toString(16).toUpperCase().padStart(16,'0');
+    var sign = (u[0] >> 63n) & 1n;
+    var exp = (u[0] >> 52n) & 0x7FFn;
+    var mant = u[0] & 0xFFFFFFFFFFFFFn;
+    detail = '符号: ' + sign + ' | 指数: ' + exp + ' (实际 ' + (Number(exp) - 1023) + ') | 尾数: 0x' + mant.toString(16).toUpperCase().padStart(13,'0');
+  }
+  document.getElementById('floatHex').value = hex;
+  document.getElementById('floatDetail').textContent = detail;
+}
+function hexToFloat(){
+  var hexStr = document.getElementById('floatHex').value.replace(/\s/g,'');
+  var prec = parseInt(document.getElementById('floatPrec').value);
+  try {
+    if (prec === 32){
+      var buf = new ArrayBuffer(4); var f = new Float32Array(buf); var u = new Uint32Array(buf);
+      u[0] = parseInt(hexStr, 16);
+      document.getElementById('floatDec').value = f[0];
+    } else {
+      var buf = new ArrayBuffer(8); var f = new Float64Array(buf); var u = new BigUint64Array(buf);
+      u[0] = BigInt('0x' + hexStr);
+      document.getElementById('floatDec').value = f[0];
+    }
+  } catch(e){ document.getElementById('floatDec').value = '无效十六进制'; }
+}
+
+/* ========== 6. Base Conversion ========== */
+function baseConvert(){
+  var fromBase = parseInt(document.getElementById('baseFrom').value);
+  var valStr = document.getElementById('baseIn').value.trim();
+  var num;
+  try { num = parseInt(valStr, fromBase); } catch(e){ return; }
+  if (isNaN(num)) { clearBaseResults(); return; }
+  document.getElementById('base2').textContent = num.toString(2);
+  document.getElementById('base8').textContent = num.toString(8);
+  document.getElementById('base10').textContent = num.toString(10);
+  document.getElementById('base16').textContent = num.toString(16).toUpperCase();
+}
+function clearBaseResults(){
+  document.getElementById('base2').textContent =
+  document.getElementById('base8').textContent =
+  document.getElementById('base10').textContent =
+  document.getElementById('base16').textContent = '';
+}
+
+/* ========== 7. Signed Number ========== */
+function calcSigned(){
+  var val = parseInt(document.getElementById('signedVal').value) || 0;
+  var bits = parseInt(document.getElementById('signedBits').value);
+  var range = Math.pow(2, bits - 1);
+  if (val < -range || val >= range) {
+    document.getElementById('smResult').textContent = '超出 ' + bits + '-bit 范围 (' + (-range) + ' ~ ' + (range - 1) + ')';
+    document.getElementById('ocResult').textContent = document.getElementById('tcResult').textContent = '';
+    return;
+  }
+  var mask = bits === 32 ? 0xFFFFFFFF : Math.pow(2, bits) - 1;
+  var twos = val & mask;
+  var hexLen = Math.ceil(bits / 4);
+  document.getElementById('tcResult').textContent = twos.toString(2).padStart(bits,'0') + ' (0x' + (twos >>> 0).toString(16).toUpperCase().padStart(hexLen,'0') + ')';
+
+  var ones;
+  if (val < 0) ones = (~Math.abs(val)) & mask;
+  else ones = val & mask;
+  document.getElementById('ocResult').textContent = ones.toString(2).padStart(bits,'0') + ' (0x' + (ones >>> 0).toString(16).toUpperCase().padStart(hexLen,'0') + ')';
+
+  var sm;
+  if (val < 0) sm = range | (Math.abs(val) & (range - 1));
+  else sm = val;
+  document.getElementById('smResult').textContent = sm.toString(2).padStart(bits,'0') + ' (0x' + (sm >>> 0).toString(16).toUpperCase().padStart(hexLen,'0') + ')';
+}
+
+/* ========== 8. chmod ========== */
+function chmodUpdate(){
+  var n = 0, sym = '';
+  for (var g=0; g<3; g++){
+    var r = document.getElementById('cr'+g).checked ? 4 : 0;
+    var w = document.getElementById('cw'+g).checked ? 2 : 0;
+    var x = document.getElementById('cx'+g).checked ? 1 : 0;
+    var v = r + w + x;
+    n = n * 8 + v;
+    sym += (r?'r':'-') + (w?'w':'-') + (x?'x':'-');
+  }
+  document.getElementById('chmodNum').value = n.toString(8).padStart(3,'0');
+  document.getElementById('chmodSym').textContent = sym;
+}
+function chmodFromNum(){
+  var s = document.getElementById('chmodNum').value.replace(/\D/g,'');
+  if (s.length > 3) s = s.slice(0,3);
+  var n = parseInt(s, 8);
+  if (isNaN(n) || n<0 || n>511) { document.getElementById('chmodSym').textContent = '---'; return; }
+  for (var g=0; g<3; g++){
+    var v = (n >> ((2-g)*3)) & 7;
+    document.getElementById('cr'+g).checked = !!(v & 4);
+    document.getElementById('cw'+g).checked = !!(v & 2);
+    document.getElementById('cx'+g).checked = !!(v & 1);
+  }
+  chmodUpdate();
+}
+
+/* ========== 9. PPI ========== */
+function calcPPI(){
+  var w = parseInt(document.getElementById('ppiW').value) || 0;
+  var h = parseInt(document.getElementById('ppiH').value) || 0;
+  var d = parseFloat(document.getElementById('ppiSize').value) || 0;
+  if (!w||!h||!d) { document.getElementById('ppiResult').textContent = '请填写所有参数'; return; }
+  var diagPx = Math.sqrt(w*w + h*h);
+  var ppi = diagPx / d;
+  document.getElementById('ppiResult').textContent =
+    '对角线像素: ' + diagPx.toFixed(0) + ' px\n' +
+    'PPI: ' + ppi.toFixed(2) + ' ppi\n' +
+    'DPI (打印): ' + ppi.toFixed(2) + ' dpi\n' +
+    '点距: ' + (25.4 / ppi).toFixed(4) + ' mm';
+}
+
+/* ========== 10. IPv4 to IPv6 ========== */
+function ipv4to6(){
+  var ip = document.getElementById('ipv4In').value.trim();
+  var parts = ip.split('.');
+  if (parts.length !== 4 || parts.some(function(p){ var n=parseInt(p); return isNaN(n)||n<0||n>255; })) {
+    document.getElementById('ipv6Out').textContent = '无效 IPv4 地址';
+    document.getElementById('ipv6Full').textContent = '';
+    return;
+  }
+  var hex = parts.map(function(p){ return ('0' + parseInt(p).toString(16)).slice(-2); });
+  document.getElementById('ipv6Out').textContent = '::ffff:' + hex[0]+hex[1] + ':' + hex[2]+hex[3];
+  document.getElementById('ipv6Full').textContent = '0000:0000:0000:0000:0000:ffff:' + hex[0]+hex[1] + ':' + hex[2]+hex[3];
+}
+
+/* ========== 11. RMB Uppercase ========== */
+function rmbConvert(){
+  var s = document.getElementById('rmbIn').value.replace(/[^\d.\-]/g,'');
+  if (!s) { document.getElementById('rmbOut').textContent = '请输入有效金额'; return; }
+  var num = parseFloat(s);
+  if (isNaN(num)) { document.getElementById('rmbOut').textContent = '无效金额'; return; }
+  var digits = '零壹贰叁肆伍陆柒捌玖';
+  var units = ['','拾','佰','仟'];
+  var bigUnits = ['','万','亿','兆'];
+  var decUnits = ['角','分'];
+
+  function convertInteger(n){
+    if (n === 0) return '零';
+    var str = n.toString();
+    var len = str.length;
+    var result = '';
+    var zeroFlag = false;
+    for (var i = 0; i < len; i++){
+      var digit = parseInt(str[i]);
+      var pos = len - 1 - i;
+      var unitIdx = pos % 4;
+      var bigIdx = Math.floor(pos / 4);
+      if (digit === 0){
+        zeroFlag = true;
+        if (unitIdx === 0) result += bigUnits[bigIdx];
+      } else {
+        if (zeroFlag) { result += '零'; zeroFlag = false; }
+        result += digits[digit] + units[unitIdx];
+        if (unitIdx === 0) result += bigUnits[bigIdx];
+      }
+    }
+    return result;
+  }
+
+  var negative = num < 0;
+  num = Math.abs(num);
+  var intPart = Math.floor(num);
+  var decPart = Math.round((num - intPart) * 100);
+
+  var out = '';
+  if (negative) out += '负';
+  out += convertInteger(intPart) + '元';
+  if (decPart === 0){
+    out += '整';
+  } else {
+    var jiao = Math.floor(decPart / 10);
+    var fen = decPart % 10;
+    if (jiao > 0) out += digits[jiao] + '角';
+    else out += '零';
+    if (fen > 0) out += digits[fen] + '分';
+  }
+  document.getElementById('rmbOut').textContent = out;
+}
+
+/* ========== 12. Unit Conversion ========== */
+var unitData = {
+  length: { units: ['米 (m)','千米 (km)','厘米 (cm)','毫米 (mm)','英寸 (in)','英尺 (ft)','码 (yd)','英里 (mi)','海里 (nmi)'],
+    toBase: [1, 1000, 0.01, 0.001, 0.0254, 0.3048, 0.9144, 1609.344, 1852] },
+  weight: { units: ['千克 (kg)','克 (g)','毫克 (mg)','吨 (t)','磅 (lb)','盎司 (oz)'],
+    toBase: [1, 0.001, 1e-6, 1000, 0.45359237, 0.028349523125] },
+  temp: { units: ['摄氏度 (°C)','华氏度 (°F)','开尔文 (K)'], toBase: null },
+  area: { units: ['平方米 (m²)','平方千米 (km²)','公顷 (ha)','英亩 (acre)','平方英尺 (ft²)'],
+    toBase: [1, 1e6, 10000, 4046.8564224, 0.09290304] },
+  volume: { units: ['升 (L)','毫升 (mL)','立方米 (m³)','美制加仑 (gal)','美制夸脱 (qt)'],
+    toBase: [1, 0.001, 1000, 3.785411784, 0.946352946] },
+  speed: { units: ['米/秒 (m/s)','千米/时 (km/h)','英里/时 (mph)','节 (kn)'],
+    toBase: [1, 1/3.6, 0.44704, 0.514444] }
+};
+
+function unitCatChange(){
+  var cat = document.getElementById('unitCat').value;
+  var data = unitData[cat];
+  var from = document.getElementById('unitFrom');
+  var to = document.getElementById('unitTo');
+  from.innerHTML = ''; to.innerHTML = '';
+  data.units.forEach(function(u,i){
+    from.innerHTML += '<option value="'+i+'">'+u+'</option>';
+    to.innerHTML += '<option value="'+i+'">'+u+'</option>';
+  });
+  to.selectedIndex = Math.min(1, data.units.length - 1);
+  unitConvert();
+}
+
+function unitConvert(){
+  var cat = document.getElementById('unitCat').value;
+  var data = unitData[cat];
+  var val = parseFloat(document.getElementById('unitVal').value);
+  var fromIdx = parseInt(document.getElementById('unitFrom').value);
+  var toIdx = parseInt(document.getElementById('unitTo').value);
+  if (isNaN(val)) { document.getElementById('unitResult').textContent = ''; return; }
+
+  var result;
+  if (cat === 'temp'){
+    if (fromIdx === 0 && toIdx === 1) result = val * 9/5 + 32;
+    else if (fromIdx === 0 && toIdx === 2) result = val + 273.15;
+    else if (fromIdx === 1 && toIdx === 0) result = (val - 32) * 5/9;
+    else if (fromIdx === 1 && toIdx === 2) result = (val - 32) * 5/9 + 273.15;
+    else if (fromIdx === 2 && toIdx === 0) result = val - 273.15;
+    else if (fromIdx === 2 && toIdx === 1) result = (val - 273.15) * 9/5 + 32;
+    else result = val;
+  } else {
+    result = val * data.toBase[fromIdx] / data.toBase[toIdx];
+  }
+  document.getElementById('unitResult').textContent = val + ' = ' + result.toPrecision(10) + ' ' + data.units[toIdx];
+}
+
+document.getElementById('unitVal').addEventListener('input', unitConvert);
+document.getElementById('unitFrom').addEventListener('change', unitConvert);
+document.getElementById('unitTo').addEventListener('change', unitConvert);
+unitCatChange();
+
+/* ========== 13. MD5 (pure JS) ========== */
+function md5(s){
+  function rotateLeft(x, n){ return (x << n) | (x >>> (32 - n)); }
+  function addUnsigned(x, y){
+    var lsw = (x & 0xFFFF) + (y & 0xFFFF);
+    var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+    return (msw << 16) | (lsw & 0xFFFF);
+  }
+  function F(x,y,z){ return (x & y) | (~x & z); }
+  function G(x,y,z){ return (x & z) | (y & ~z); }
+  function H(x,y,z){ return x ^ y ^ z; }
+  function I(x,y,z){ return y ^ (x | ~z); }
+  function FF(a,b,c,d,x,s,ac){ a = addUnsigned(a, addUnsigned(addUnsigned(F(b,c,d), x), ac)); return addUnsigned(rotateLeft(a, s), b); }
+  function GG(a,b,c,d,x,s,ac){ a = addUnsigned(a, addUnsigned(addUnsigned(G(b,c,d), x), ac)); return addUnsigned(rotateLeft(a, s), b); }
+  function HH(a,b,c,d,x,s,ac){ a = addUnsigned(a, addUnsigned(addUnsigned(H(b,c,d), x), ac)); return addUnsigned(rotateLeft(a, s), b); }
+  function II(a,b,c,d,x,s,ac){ a = addUnsigned(a, addUnsigned(addUnsigned(I(b,c,d), x), ac)); return addUnsigned(rotateLeft(a, s), b); }
+
+  var bytes = [];
+  for (var i = 0; i < s.length; i++) bytes.push(s.charCodeAt(i) & 0xFF);
+  var len = bytes.length;
+  bytes.push(0x80);
+  while ((bytes.length % 64) !== 56) bytes.push(0);
+  var bitLen = len * 8;
+  for (var i = 0; i < 8; i++) bytes.push((bitLen >>> (i * 8)) & 0xFF);
+
+  var a = 0x67452301, b = 0xEFCDAB89, c = 0x98BADCFE, d = 0x10325476;
+
+  for (var i = 0; i < bytes.length; i += 64){
+    var X = [];
+    for (var j = 0; j < 16; j++){
+      X[j] = bytes[i+j*4] | (bytes[i+j*4+1] << 8) | (bytes[i+j*4+2] << 16) | (bytes[i+j*4+3] << 24);
+    }
+    var A = a, B = b, C = c, D = d;
+    a = FF(a,b,c,d,X[0],7,0xD76AA478); d = FF(d,a,b,c,X[1],12,0xE8C7B756); c = FF(c,d,a,b,X[2],17,0x242070DB); b = FF(b,c,d,a,X[3],22,0xC1BDCEEE);
+    a = FF(a,b,c,d,X[4],7,0xF57C0FAF); d = FF(d,a,b,c,X[5],12,0x4787C62A); c = FF(c,d,a,b,X[6],17,0xA8304613); b = FF(b,c,d,a,X[7],22,0xFD469501);
+    a = FF(a,b,c,d,X[8],7,0x698098D8); d = FF(d,a,b,c,X[9],12,0x8B44F7AF); c = FF(c,d,a,b,X[10],17,0xFFFF5BB1); b = FF(b,c,d,a,X[11],22,0x895CD7BE);
+    a = FF(a,b,c,d,X[12],7,0x6B901122); d = FF(d,a,b,c,X[13],12,0xFD987193); c = FF(c,d,a,b,X[14],17,0xA679438E); b = FF(b,c,d,a,X[15],22,0x49B40821);
+    a = GG(a,b,c,d,X[1],5,0xF61E2562); d = GG(d,a,b,c,X[6],9,0xC040B340); c = GG(c,d,a,b,X[11],14,0x265E5A51); b = GG(b,c,d,a,X[0],20,0xE9B6C7AA);
+    a = GG(a,b,c,d,X[5],5,0xD62F105D); d = GG(d,a,b,c,X[10],9,0x2441453); c = GG(c,d,a,b,X[15],14,0xD8A1E681); b = GG(b,c,d,a,X[4],20,0xE7D3FBC8);
+    a = GG(a,b,c,d,X[9],5,0x21E1CDE6); d = GG(d,a,b,c,X[14],9,0xC33707D6); c = GG(c,d,a,b,X[3],14,0xF4D50D87); b = GG(b,c,d,a,X[8],20,0x455A14ED);
+    a = GG(a,b,c,d,X[13],5,0xA9E3E905); d = GG(d,a,b,c,X[2],9,0xFCEFA3F8); c = GG(c,d,a,b,X[7],14,0x676F02D9); b = GG(b,c,d,a,X[12],20,0x8D2A4C8A);
+    a = HH(a,b,c,d,X[5],4,0xFFFA3942); d = HH(d,a,b,c,X[8],11,0x8771F681); c = HH(c,d,a,b,X[11],16,0x6D9D6122); b = HH(b,c,d,a,X[14],23,0xFDE5380C);
+    a = HH(a,b,c,d,X[1],4,0xA4BEEA44); d = HH(d,a,b,c,X[4],11,0x4BDECFA9); c = HH(c,d,a,b,X[7],16,0xF6BB4B60); b = HH(b,c,d,a,X[10],23,0xBEBFBC70);
+    a = HH(a,b,c,d,X[13],4,0x289B7EC6); d = HH(d,a,b,c,X[0],11,0xEAA127FA); c = HH(c,d,a,b,X[3],16,0xD4EF3085); b = HH(b,c,d,a,X[6],23,0x4881D05);
+    a = HH(a,b,c,d,X[9],4,0xD9D4D039); d = HH(d,a,b,c,X[12],11,0xE6DB99E5); c = HH(c,d,a,b,X[15],16,0x1FA27CF8); b = HH(b,c,d,a,X[2],23,0xC4AC5665);
+    a = II(a,b,c,d,X[0],6,0xF4292244); d = II(d,a,b,c,X[7],10,0x432AFF97); c = II(c,d,a,b,X[14],15,0xAB9423A7); b = II(b,c,d,a,X[5],21,0xFC93A039);
+    a = II(a,b,c,d,X[12],6,0x655B59C3); d = II(d,a,b,c,X[3],10,0x8F0CCC92); c = II(c,d,a,b,X[10],15,0xFFEFF47D); b = II(b,c,d,a,X[1],21,0x85845DD1);
+    a = II(a,b,c,d,X[8],6,0x6FA87E4F); d = II(d,a,b,c,X[15],10,0xFE2CE6E0); c = II(c,d,a,b,X[6],15,0xA3014314); b = II(b,c,d,a,X[13],21,0x4E0811A1);
+    a = II(a,b,c,d,X[4],6,0xF7537E82); d = II(d,a,b,c,X[11],10,0xBD3AF235); c = II(c,d,a,b,X[2],15,0x2AD7D2BB); b = II(b,c,d,a,X[9],21,0xEB86D391);
+    a = addUnsigned(a, A); b = addUnsigned(b, B); c = addUnsigned(c, C); d = addUnsigned(d, D);
+  }
+
+  function wordToHex(w){ var h = (w >>> 0).toString(16); while (h.length < 8) h = '0' + h; return h; }
+  return wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
+}
+
+function calcMD5(){
+  var inp = document.getElementById('md5In').value;
+  var hash = md5(inp);
+  document.getElementById('md5Lower').textContent = hash;
+  document.getElementById('md5Upper').textContent = hash.toUpperCase();
+}
+</script>
+</body>
+</html>

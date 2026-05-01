@@ -1,38 +1,107 @@
 <!DOCTYPE html>
-<html lang="zh_cn">
+<html lang="zh_cn" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/win11.css">
+    <script>var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);</script>
     <title>Welcome!</title>
 </head>
-<body style="background-image: url(/images/dirt.png); background-size: 100px; image-rendering: pixelated; margin-bottom: 50px;">
-<div class="container" style="background-color: rgba(255,255,255,0.5); padding: 20px; border-radius: 10px; margin-top: 50px; -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 0 10px rgba(0,0,0,0.5);">
-    <div class="jumbotron" style="background-color: rgba(255,255,255,0.3); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);">
-        <h1 style="text-align: center"><strong>你好!</strong></h1>
-        <h2 style="text-align: center">这是<strong>TTHILLTT</strong>的网站</h2>
-    </div>
-    <h3 style="text-align: center">
-        或许你可以在<a href="https://github.com/TTHILLTT">GitHub</a>上关注我!给我的项目发几个PR什么的!
-    </h3>
-    <h4 style="text-align: center">这是我的<a href="/pages/socialMedias.html">联系方式</a></h4>
-    <p style="text-align: center">
-        <a class="btn btn-primary btn-lg" href="/NumBomb/"><strong>点击跳转至 数字炸弹小游戏</strong></a>
-    </p>
-    <p style="text-align: center">
-        <a class="btn btn-primary btn-lg" href="/pages/NGGYU.html"><strong>千万别点</strong></a>
-    </p>
-    <div class="row" style="margin-top: 50px;">
-        <div class="col-md-6">
-            <iframe class="img img-responsive img-thumbnail" src="https://www.runoob.com/html/html-tutorial.html" style="text-align:center; width:100%; height:500px;">
-                Thanks!
-            </iframe>
-        </div>
-        <div class="col-md-6">
-            <iframe class="img img-responsive img-thumbnail" width="960" height="720" src="https://myworldzycpc.top" style="text-align:center; width:100%; height:500px;">
-                Thanks!
-            </iframe>
-        </div>
-    </div>
+<body>
+
+<!-- Desktop Background -->
+<div class="desktop"></div>
+
+<!-- Desktop Icons -->
+<div class="desktop-icons">
+    <a class="desktop-icon" href="./pages/socialMedias.html">
+        <span class="d-icon">💬</span>
+        <span class="d-label">联系方式</span>
+    </a>
+    <a class="desktop-icon" href="./pages/NGGYU.html">
+        <span class="d-icon">⚠️</span>
+        <span class="d-label">千万别点</span>
+    </a>
+    <a class="desktop-icon" href="https://github.com/TTHILLTT" target="_blank" rel="noopener">
+        <span class="d-icon">🐙</span>
+        <span class="d-label">GitHub</span>
+    </a>
+    <a class="desktop-icon" href="./pages/tools.html">
+        <span class="d-icon">🧰</span>
+        <span class="d-label">有用的工具</span>
+    </a>
 </div>
+
+<!-- Window -->
+<main class="content-overlay">
+    <div class="window">
+        <div class="titlebar">
+            <div class="titlebar-left">
+                <span class="titlebar-app-icon">🌐</span>
+                <span class="titlebar-text">TTHILLTT</span>
+            </div>
+            <div class="titlebar-controls">
+                <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
+                <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
+                <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+            </div>
+        </div>
+
+        <div class="window-body">
+            <h1>你好! 👋</h1>
+            <h2>这是 <strong>TTHILLTT</strong> 的网站</h2>
+
+            <p class="text-center mx-16">
+                或许你可以在 <a class="link-subtle" href="https://github.com/TTHILLTT">GitHub</a> 上关注我！给我的项目发几个 PR 什么的！
+            </p>
+            <p class="text-center mx-12">
+                这是我的 <a class="link-subtle" href="./pages/socialMedias.html">联系方式</a>
+            </p>
+
+            <div class="flex-row mx-20">
+                <a class="btn-win11" href="./pages/NGGYU.html">⚠️ 千万别点</a>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<footer class="taskbar">
+    <div class="taskbar-center">
+        <a class="taskbar-icon active" href="./index.html" title="Home">🏠</a>
+        <a class="taskbar-icon" href="https://github.com/TTHILLTT" title="GitHub" target="_blank" rel="noopener">🐙</a>
+        <a class="taskbar-icon" href="./pages/socialMedias.html" title="Contact">💬</a>
+        <a class="taskbar-icon" href="./pages/NGGYU.html" title="NGGYU">⚠️</a>
+        <a class="taskbar-icon" href="./pages/tools.html" title="Tools">🧰</a>
+    </div>
+    <div class="taskbar-right">
+        <button type="button" class="theme-toggle" id="themeToggle" title="切换深浅色模式" aria-label="切换深浅色模式">☀️</button>
+        <span id="clock"></span>
+    </div>
+</footer>
+
+<script>
+(function(){
+    var theme = document.documentElement.getAttribute('data-theme');
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+})();
+
+document.getElementById('themeToggle').addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    this.textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', next);
+});
+
+(function tick() {
+    var d = new Date();
+    document.getElementById('clock').textContent =
+        d.toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'}) + '  ' +
+        d.toLocaleDateString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit'});
+    requestAnimationFrame(function(){ setTimeout(tick, 1000 - Date.now() % 1000); });
+})();
+</script>
 </body>
 </html>
