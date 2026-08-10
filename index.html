@@ -327,6 +327,228 @@
                             <div class="result" id="md5Upper"></div>
                         </div>
 
+                        <!-- 14. SHA-256 Hash -->
+                        <div class="tool-card">
+                            <h3>🔑 SHA-256 哈希</h3>
+                            <label>输入文本</label>
+                            <textarea id="shaIn" rows="2" placeholder="输入要计算 SHA-256 的文本"></textarea>
+                            <button type="button" class="btn-sm accent" onclick="calcSHA()" style="margin-top:8px;">计算 SHA-256</button>
+                            <label style="margin-top:8px;">SHA-256</label>
+                            <div class="result" id="shaOut"></div>
+                        </div>
+
+                        <!-- 15. Password Generator -->
+                        <div class="tool-card">
+                            <h3>🔐 密码生成器</h3>
+                            <div class="inline-row" style="margin-bottom:8px;">
+                                <input type="number" id="pwdLen" value="16" min="4" max="64" placeholder="长度">
+                                <button type="button" class="btn-sm accent" onclick="genPassword()">生成</button>
+                            </div>
+                            <div class="inline-row" style="flex-wrap:wrap;">
+                                <label style="flex:0 0 auto; display:flex; align-items:center; gap:4px; text-transform:none;"><input type="checkbox" id="pwdUpper" checked>大写</label>
+                                <label style="flex:0 0 auto; display:flex; align-items:center; gap:4px; text-transform:none;"><input type="checkbox" id="pwdLower" checked>小写</label>
+                                <label style="flex:0 0 auto; display:flex; align-items:center; gap:4px; text-transform:none;"><input type="checkbox" id="pwdDigit" checked>数字</label>
+                                <label style="flex:0 0 auto; display:flex; align-items:center; gap:4px; text-transform:none;"><input type="checkbox" id="pwdSymbol" checked>符号</label>
+                            </div>
+                            <div class="result" id="pwdOut" style="margin-top:8px;"></div>
+                            <div class="result" id="pwdStrength"></div>
+                        </div>
+
+                        <!-- 16. Timestamp Converter -->
+                        <div class="tool-card">
+                            <h3>⏱️ 时间戳转换</h3>
+                            <label>时间戳 (秒或毫秒)</label>
+                            <div class="inline-row">
+                                <input type="text" id="tsIn" placeholder="例如: 1754294400">
+                                <button type="button" class="btn-sm accent" onclick="tsToDate()">→ 日期</button>
+                            </div>
+                            <div class="result" id="tsDateOut"></div>
+                            <label style="margin-top:8px;">日期时间</label>
+                            <div class="inline-row">
+                                <input type="datetime-local" id="dateIn">
+                                <button type="button" class="btn-sm accent" onclick="dateToTs()">→ 时间戳</button>
+                            </div>
+                            <div class="result" id="tsOut"></div>
+                        </div>
+
+                        <!-- 17. JSON Formatter -->
+                        <div class="tool-card">
+                            <h3>🧾 JSON 格式化 / 压缩</h3>
+                            <label>输入 JSON</label>
+                            <textarea id="jsonIn" rows="3" placeholder='{"name":"TTHILLTT"}'></textarea>
+                            <div class="btn-row">
+                                <button type="button" class="btn-sm accent" onclick="jsonPretty()">格式化</button>
+                                <button type="button" class="btn-sm" onclick="jsonMinify()">压缩</button>
+                                <button type="button" class="btn-sm" onclick="jsonValidate()">校验</button>
+                            </div>
+                            <label style="margin-top:8px;">结果</label>
+                            <div class="result" id="jsonOut"></div>
+                        </div>
+
+                        <!-- 18. Text Stats -->
+                        <div class="tool-card">
+                            <h3>📊 文本统计</h3>
+                            <label>输入文本（实时统计）</label>
+                            <textarea id="statIn" rows="3" oninput="textStats()"></textarea>
+                            <div class="result" id="statOut" style="margin-top:8px;"></div>
+                        </div>
+
+                        <!-- 19. Color Converter -->
+                        <div class="tool-card">
+                            <h3>🎨 颜色转换</h3>
+                            <label>输入颜色 (HEX / RGB / HSL)</label>
+                            <div class="inline-row">
+                                <input type="color" id="colorPicker" value="#4CC2FF" style="flex:0 0 44px; height:34px; padding:2px; cursor:pointer;">
+                                <input type="text" id="colorText" value="#4CC2FF" oninput="colorConvert()">
+                            </div>
+                            <div class="result" id="colorOut" style="margin-top:8px;"></div>
+                            <div id="colorPreview" style="height:34px; border-radius:6px; border:1px solid var(--border-input); margin-top:6px;"></div>
+                        </div>
+
+                        <!-- 20. Regex Tester -->
+                        <div class="tool-card">
+                            <h3>🧪 正则表达式测试</h3>
+                            <div class="inline-row" style="margin-bottom:8px;">
+                                <input type="text" id="reIn" placeholder="例如: \d+">
+                                <input type="text" id="reFlags" placeholder="flags (g/i/m)" style="flex:0 0 110px;">
+                            </div>
+                            <label>测试文本</label>
+                            <textarea id="reText" rows="2"></textarea>
+                            <button type="button" class="btn-sm accent" onclick="reTest()" style="margin-top:8px;">测试</button>
+                            <div class="result" id="reOut" style="margin-top:8px;"></div>
+                        </div>
+
+                        <!-- 21. Random Numbers -->
+                        <div class="tool-card">
+                            <h3>🎲 随机数生成</h3>
+                            <div class="inline-row" style="margin-bottom:8px;">
+                                <input type="number" id="randMin" value="1" placeholder="最小值">
+                                <span class="fixed">~</span>
+                                <input type="number" id="randMax" value="100" placeholder="最大值">
+                            </div>
+                            <div class="inline-row" style="margin-bottom:8px;">
+                                <input type="number" id="randCount" value="5" min="1" max="1000" placeholder="数量">
+                                <button type="button" class="btn-sm accent" onclick="randGen()">生成</button>
+                            </div>
+                            <div class="inline-row" style="flex-wrap:wrap;">
+                                <label style="flex:0 0 auto; display:flex; align-items:center; gap:4px; text-transform:none;"><input type="checkbox" id="randInt" checked>整数</label>
+                                <label style="flex:0 0 auto; display:flex; align-items:center; gap:4px; text-transform:none;"><input type="checkbox" id="randUnique">不重复</label>
+                            </div>
+                            <div class="result" id="randOut" style="margin-top:8px;"></div>
+                        </div>
+
+                        <!-- 22. UUID Generator -->
+                        <div class="tool-card">
+                            <h3>🆔 UUID v4 生成</h3>
+                            <div class="inline-row">
+                                <input type="number" id="uuidCount" value="1" min="1" max="20" placeholder="数量">
+                                <button type="button" class="btn-sm accent" onclick="uuidGen()">生成</button>
+                            </div>
+                            <div class="result" id="uuidOut" style="margin-top:8px;"></div>
+                        </div>
+
+                        <!-- 23. CRC32 -->
+                        <div class="tool-card">
+                            <h3>🧮 CRC32 校验</h3>
+                            <label>输入文本</label>
+                            <textarea id="crcIn" rows="2" placeholder="输入要计算 CRC32 的文本"></textarea>
+                            <button type="button" class="btn-sm accent" onclick="calcCRC()" style="margin-top:8px;">计算 CRC32</button>
+                            <div class="result" id="crcOut" style="margin-top:8px;"></div>
+                        </div>
+
+                        <!-- 24. Variable Naming Convention -->
+                        <div class="tool-card">
+                            <h3>🏷️ 变量命名转换</h3>
+                            <label>输入 (例如: hello_world 或 HelloWorld)</label>
+                            <div class="inline-row">
+                                <input type="text" id="nameIn" placeholder="hello world">
+                                <button type="button" class="btn-sm accent" onclick="nameConv()">转换</button>
+                            </div>
+                            <div style="margin-top:8px;">
+                                <label>camelCase</label><div class="result" id="nameCamel"></div>
+                                <label>PascalCase</label><div class="result" id="namePascal"></div>
+                                <label>snake_case</label><div class="result" id="nameSnake"></div>
+                                <label>SCREAMING_SNAKE</label><div class="result" id="nameScream"></div>
+                                <label>kebab-case</label><div class="result" id="nameKebab"></div>
+                            </div>
+                        </div>
+
+                        <!-- 25. Line Processing -->
+                        <div class="tool-card">
+                            <h3>📝 文本行处理</h3>
+                            <label>输入文本</label>
+                            <textarea id="linesIn" rows="3"></textarea>
+                            <div class="btn-row">
+                                <button type="button" class="btn-sm accent" onclick="linesProcess('empty')">去空行</button>
+                                <button type="button" class="btn-sm" onclick="linesProcess('dedup')">去重</button>
+                                <button type="button" class="btn-sm" onclick="linesProcess('sort')">升序</button>
+                                <button type="button" class="btn-sm" onclick="linesProcess('sortdesc')">降序</button>
+                                <button type="button" class="btn-sm" onclick="linesProcess('reverse')">倒序</button>
+                            </div>
+                            <label style="margin-top:8px;">结果</label>
+                            <textarea id="linesOut" rows="3" readonly></textarea>
+                        </div>
+
+                        <!-- 26. HTML Entities -->
+                        <div class="tool-card">
+                            <h3>🔣 HTML 实体 编码/解码</h3>
+                            <label>输入文本</label>
+                            <textarea id="htmlIn" rows="2" placeholder='例如: <a href="#">链接</a>'></textarea>
+                            <div class="btn-row">
+                                <button type="button" class="btn-sm accent" onclick="htmlEncode()">编码 →</button>
+                                <button type="button" class="btn-sm" onclick="htmlDecode()">← 解码</button>
+                            </div>
+                            <label style="margin-top:8px;">结果</label>
+                            <textarea id="htmlOut" rows="2" readonly></textarea>
+                        </div>
+
+                        <!-- 27. Morse Code -->
+                        <div class="tool-card">
+                            <h3>📡 摩尔斯电码</h3>
+                            <label>输入文本 / 摩尔斯码（字母用空格分隔，单词用 / 分隔）</label>
+                            <textarea id="morseIn" rows="2" placeholder="SOS 或 ... --- ..."></textarea>
+                            <div class="btn-row">
+                                <button type="button" class="btn-sm accent" onclick="morseEncode()">编码 →</button>
+                                <button type="button" class="btn-sm" onclick="morseDecode()">← 解码</button>
+                            </div>
+                            <div class="result" id="morseOut" style="margin-top:8px;"></div>
+                        </div>
+
+                        <!-- 28. Chinese ID Card Check -->
+                        <div class="tool-card">
+                            <h3>🪪 身份证校验</h3>
+                            <label>18 位身份证号码</label>
+                            <div class="inline-row">
+                                <input type="text" id="idCard" placeholder="例如: 110101199003074510">
+                                <button type="button" class="btn-sm accent" onclick="idCheck()">校验</button>
+                            </div>
+                            <div class="result" id="idOut" style="margin-top:8px;"></div>
+                        </div>
+
+                        <!-- 29. Prime Factorization -->
+                        <div class="tool-card">
+                            <h3>🧩 质因数分解</h3>
+                            <label>正整数 (≤ 1,000,000,000,000)</label>
+                            <div class="inline-row">
+                                <input type="number" id="primeIn" placeholder="例如: 360">
+                                <button type="button" class="btn-sm accent" onclick="factorize()">分解</button>
+                            </div>
+                            <div class="result" id="primeOut" style="margin-top:8px;"></div>
+                        </div>
+
+                        <!-- 30. GCD / LCM -->
+                        <div class="tool-card">
+                            <h3>➗ GCD / LCM 计算器</h3>
+                            <label>两个整数</label>
+                            <div class="inline-row">
+                                <input type="number" id="gcdA" placeholder="例如: 12">
+                                <span class="fixed">,</span>
+                                <input type="number" id="gcdB" placeholder="例如: 18">
+                                <button type="button" class="btn-sm accent" onclick="gcdCalc()">计算</button>
+                            </div>
+                            <div class="result" id="gcdOut" style="margin-top:8px;"></div>
+                        </div>
+
                     </div><!-- .tools-grid -->
 
                 </div>

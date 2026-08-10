@@ -334,13 +334,16 @@ function md5(s){
   function HH(a,b,c,d,x,s,ac){ a = addUnsigned(a, addUnsigned(addUnsigned(H(b,c,d), x), ac)); return addUnsigned(rotateLeft(a, s), b); }
   function II(a,b,c,d,x,s,ac){ a = addUnsigned(a, addUnsigned(addUnsigned(I(b,c,d), x), ac)); return addUnsigned(rotateLeft(a, s), b); }
 
-  var bytes = [];
-  for (var i = 0; i < s.length; i++) bytes.push(s.charCodeAt(i) & 0xFF);
+  // 先按 UTF-8 编码，保证中文等非 ASCII 字符与标准 MD5 结果一致
+  var bytes = Array.from(new TextEncoder().encode(s));
   var len = bytes.length;
   bytes.push(0x80);
   while ((bytes.length % 64) !== 56) bytes.push(0);
-  var bitLen = len * 8;
-  for (var i = 0; i < 8; i++) bytes.push((bitLen >>> (i * 8)) & 0xFF);
+  // 64 位原始字节长度（低位 + 高位）
+  var bitLow = (len * 8) >>> 0;
+  var bitHigh = Math.floor(len / 0x20000000);
+  for (var i = 0; i < 4; i++) bytes.push((bitLow >>> (i * 8)) & 0xFF);
+  for (var i = 0; i < 4; i++) bytes.push((bitHigh >>> (i * 8)) & 0xFF);
 
   var a = 0x67452301, b = 0xEFCDAB89, c = 0x98BADCFE, d = 0x10325476;
 
@@ -369,7 +372,12 @@ function md5(s){
     a = addUnsigned(a, A); b = addUnsigned(b, B); c = addUnsigned(c, C); d = addUnsigned(d, D);
   }
 
-  function wordToHex(w){ var h = (w >>> 0).toString(16); while (h.length < 8) h = '0' + h; return h; }
+  // MD5 约定按小端输出每个 32 位字（低字节在前）
+  function wordToHex(w){
+    var h = '';
+    for (var i = 0; i < 4; i++) h += ('0' + ((w >>> (i * 8)) & 0xFF).toString(16)).slice(-2);
+    return h;
+  }
   return wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
 }
 
@@ -378,4 +386,469 @@ function calcMD5(){
   var hash = md5(inp);
   document.getElementById('md5Lower').textContent = hash;
   document.getElementById('md5Upper').textContent = hash.toUpperCase();
+}
+
+/* ========== 14. SHA-256 (pure JS) ========== */
+function sha256(s){
+  var bytes = Array.from(new TextEncoder().encode(s));
+  var bitLen = BigInt(bytes.length) * 8n;
+  bytes.push(0x80);
+  while (bytes.length % 64 !== 56) bytes.push(0);
+  for (var i = 7; i >= 0; i--) bytes.push(Number((bitLen >> BigInt(i * 8)) & 0xFFn));
+
+  var K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+           0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+           0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+           0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+           0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+           0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+           0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+           0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+
+  var H0=0x6a09e667,H1=0xbb67ae85,H2=0x3c6ef372,H3=0xa54ff53a,H4=0x510e527f,H5=0x9b05688c,H6=0x1f83d9ab,H7=0x5be0cd19;
+  var w = new Array(64);
+  function rotr(x, n){ return (x >>> n) | (x << (32 - n)); }
+
+  for (var i = 0; i < bytes.length; i += 64){
+    for (var j = 0; j < 16; j++){
+      w[j] = (bytes[i + j*4] << 24) | (bytes[i + j*4 + 1] << 16) | (bytes[i + j*4 + 2] << 8) | bytes[i + j*4 + 3];
+    }
+    for (var j = 16; j < 64; j++){
+      var s0 = rotr(w[j-15], 7) ^ rotr(w[j-15], 18) ^ (w[j-15] >>> 3);
+      var s1 = rotr(w[j-2], 17) ^ rotr(w[j-2], 19) ^ (w[j-2] >>> 10);
+      w[j] = (w[j-16] + s0 + w[j-7] + s1) | 0;
+    }
+    var a=H0, b=H1, c=H2, d=H3, e=H4, f=H5, g=H6, h=H7;
+    for (var j = 0; j < 64; j++){
+      var S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+      var ch = (e & f) ^ (~e & g);
+      var t1 = (h + S1 + ch + K[j] + w[j]) | 0;
+      var S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+      var maj = (a & b) ^ (a & c) ^ (b & c);
+      var t2 = (S0 + maj) | 0;
+      h=g; g=f; f=e; e=(d+t1)|0; d=c; c=b; b=a; a=(t1+t2)|0;
+    }
+    H0=(H0+a)|0; H1=(H1+b)|0; H2=(H2+c)|0; H3=(H3+d)|0;
+    H4=(H4+e)|0; H5=(H5+f)|0; H6=(H6+g)|0; H7=(H7+h)|0;
+  }
+  return [H0,H1,H2,H3,H4,H5,H6,H7].map(function(x){ return (x >>> 0).toString(16).padStart(8, '0'); }).join('');
+}
+
+function calcSHA(){
+  var s = document.getElementById('shaIn').value;
+  document.getElementById('shaOut').textContent = sha256(s);
+}
+
+/* ========== 15. Password Generator ========== */
+function genPassword(){
+  var len = parseInt(document.getElementById('pwdLen').value, 10) || 16;
+  len = Math.max(4, Math.min(64, len));
+  var sets = [];
+  if (document.getElementById('pwdUpper').checked) sets.push('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  if (document.getElementById('pwdLower').checked) sets.push('abcdefghijklmnopqrstuvwxyz');
+  if (document.getElementById('pwdDigit').checked) sets.push('0123456789');
+  if (document.getElementById('pwdSymbol').checked) sets.push('!@#$%^&*()-_=+[]{};:,.<>?/');
+  if (!sets.length) sets.push('abcdefghijklmnopqrstuvwxyz', '0123456789');
+  var all = sets.join('');
+  var chars = [];
+  // 保证每个选中的字符集至少出现一次
+  for (var i = 0; i < sets.length; i++) chars.push(sets[i][Math.floor(Math.random() * sets[i].length)]);
+  for (var i = chars.length; i < len; i++) chars.push(all[Math.floor(Math.random() * all.length)]);
+  // Fisher-Yates 洗牌
+  for (var i = chars.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = chars[i]; chars[i] = chars[j]; chars[j] = t;
+  }
+  var pool = sets.reduce(function(n, s){ return n + s.length; }, 0);
+  var entropy = Math.round(len * Math.log2(pool));
+  var strength = entropy < 50 ? '弱' : entropy < 80 ? '中' : entropy < 120 ? '强' : '极强';
+  document.getElementById('pwdOut').textContent = chars.join('');
+  document.getElementById('pwdStrength').textContent =
+    '长度 ' + len + ' | 字符池 ' + pool + ' | 估算熵 ' + entropy + ' bit（' + strength + '）';
+}
+
+/* ========== 16. Timestamp Converter ========== */
+function tsToDate(){
+  var v = document.getElementById('tsIn').value.trim();
+  var out = document.getElementById('tsDateOut');
+  if (!/^-?\d+(\.\d+)?$/.test(v)){ out.textContent = '请输入数字时间戳'; return; }
+  var ms = parseFloat(v);
+  if (Math.abs(ms) < 1e12) ms *= 1000; // 秒 → 毫秒
+  var d = new Date(ms);
+  if (isNaN(d.getTime())){ out.textContent = '无效时间戳'; return; }
+  out.textContent = '本地: ' + d.toLocaleString('zh-CN', { hour12: false }) +
+    '\nUTC : ' + d.toUTCString() +
+    '\nISO : ' + d.toISOString();
+}
+
+function dateToTs(){
+  var v = document.getElementById('dateIn').value;
+  var out = document.getElementById('tsOut');
+  if (!v){ out.textContent = '请选择日期时间'; return; }
+  var ms = new Date(v).getTime();
+  out.textContent = '秒: ' + Math.floor(ms / 1000) + '\n毫秒: ' + ms;
+}
+
+/* ========== 17. JSON Formatter ========== */
+function jsonPretty(){
+  var raw = document.getElementById('jsonIn').value;
+  try { document.getElementById('jsonOut').textContent = JSON.stringify(JSON.parse(raw), null, 2); }
+  catch(e){ document.getElementById('jsonOut').textContent = '解析失败: ' + e.message; }
+}
+
+function jsonMinify(){
+  var raw = document.getElementById('jsonIn').value;
+  try { document.getElementById('jsonOut').textContent = JSON.stringify(JSON.parse(raw)); }
+  catch(e){ document.getElementById('jsonOut').textContent = '解析失败: ' + e.message; }
+}
+
+function jsonValidate(){
+  var raw = document.getElementById('jsonIn').value;
+  try { JSON.parse(raw); document.getElementById('jsonOut').textContent = '✅ 合法 JSON'; }
+  catch(e){ document.getElementById('jsonOut').textContent = '❌ 解析失败: ' + e.message; }
+}
+
+/* ========== 18. Text Stats ========== */
+function textStats(){
+  var s = document.getElementById('statIn').value;
+  var noSpace = s.replace(/\s/g, '');
+  var cjk = (s.match(/[\u4e00-\u9fff\u3400-\u4dbf]/g) || []).length;
+  var words = s.trim() ? s.trim().split(/\s+/).length : 0;
+  var lines = s ? s.split('\n').length : 0;
+  var paras = s.trim() ? s.trim().split(/\n\s*\n/).length : 0;
+  var bytes = new TextEncoder().encode(s).length;
+  document.getElementById('statOut').textContent =
+    '字符数: ' + s.length + ' | 不含空白: ' + noSpace.length +
+    '\n中文字符: ' + cjk + ' | 单词数: ' + words +
+    '\n行数: ' + lines + ' | 段落数: ' + paras +
+    '\nUTF-8 字节数: ' + bytes;
+}
+
+/* ========== 19. Color Converter ========== */
+function rgbToHsl(r, g, b){
+  r /= 255; g /= 255; b /= 255;
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+  var h = 0, s = 0, l = (max + min) / 2;
+  if (max !== min){
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h /= 6;
+  }
+  return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+}
+
+function hslToRgb(h, s, l){
+  h = ((h % 360) + 360) % 360 / 360;
+  s /= 100; l /= 100;
+  function hue2rgb(p, q, t){
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q - p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    return p;
+  }
+  var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  var p = 2 * l - q;
+  return [Math.round(hue2rgb(p, q, h + 1/3) * 255), Math.round(hue2rgb(p, q, h) * 255), Math.round(hue2rgb(p, q, h - 1/3) * 255)];
+}
+
+function colorConvert(){
+  var v = document.getElementById('colorText').value.trim();
+  var out = document.getElementById('colorOut');
+  var preview = document.getElementById('colorPreview');
+  var r, g, b;
+  var m = v.match(/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (m){
+    var h = m[1];
+    if (h.length === 3) h = h.replace(/./g, function(c){ return c + c; });
+    r = parseInt(h.slice(0, 2), 16); g = parseInt(h.slice(2, 4), 16); b = parseInt(h.slice(4, 6), 16);
+  } else {
+    var m2 = v.match(/^rgba?\(([^)]+)\)$/i);
+    if (m2){
+      var p = m2[1].split(',');
+      r = parseInt(p[0].trim(), 10); g = parseInt(p[1].trim(), 10); b = parseInt(p[2].trim(), 10);
+    } else {
+      var m3 = v.match(/^hsla?\(([^)]+)\)$/i);
+      if (m3){
+        var p = m3[1].split(',');
+        var rgb = hslToRgb(parseFloat(p[0].trim()), parseFloat(p[1].trim()), parseFloat(p[2].trim()));
+        r = rgb[0]; g = rgb[1]; b = rgb[2];
+      }
+    }
+  }
+  if (r === undefined || isNaN(r) || isNaN(g) || isNaN(b) || r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255){
+    out.textContent = '无法解析的颜色（支持 #RGB / #RRGGBB / rgb() / hsl()）';
+    preview.style.background = 'transparent';
+    return;
+  }
+  var hex = '#' + [r, g, b].map(function(x){ return ('0' + x.toString(16)).slice(-2); }).join('');
+  var hsl = rgbToHsl(r, g, b);
+  document.getElementById('colorPicker').value = hex;
+  out.textContent = 'HEX: ' + hex.toUpperCase() +
+    '\nRGB: rgb(' + r + ', ' + g + ', ' + b + ')' +
+    '\nHSL: hsl(' + hsl[0] + ', ' + hsl[1] + '%, ' + hsl[2] + '%)';
+  preview.style.background = hex;
+}
+
+document.getElementById('colorPicker').addEventListener('input', function(){
+  document.getElementById('colorText').value = this.value;
+  colorConvert();
+});
+colorConvert();
+
+/* ========== 20. Regex Tester ========== */
+function reTest(){
+  var pattern = document.getElementById('reIn').value;
+  var flags = document.getElementById('reFlags').value.trim();
+  var text = document.getElementById('reText').value;
+  var out = document.getElementById('reOut');
+  var re;
+  try { re = new RegExp(pattern, flags); }
+  catch(e){ out.textContent = '正则表达式错误: ' + e.message; return; }
+  var matches = [];
+  var m, count = 0;
+  if (flags.indexOf('g') === -1){
+    m = re.exec(text);
+    if (m){ matches.push(m[0]); count = 1; }
+  } else {
+    while ((m = re.exec(text)) !== null){
+      matches.push(m[0]);
+      count++;
+      if (m.index === re.lastIndex) re.lastIndex++;
+      if (count >= 200){ matches.push('…（已截断，最多显示 200 条）'); break; }
+    }
+  }
+  var res = '匹配次数: ' + count + (count ? '\n' : '');
+  for (var i = 0; i < matches.length; i++) res += (i + 1) + '. ' + matches[i] + '\n';
+  out.textContent = res.trim();
+}
+
+/* ========== 21. Random Numbers ========== */
+function randGen(){
+  var min = parseFloat(document.getElementById('randMin').value);
+  var max = parseFloat(document.getElementById('randMax').value);
+  var count = parseInt(document.getElementById('randCount').value, 10);
+  var isInt = document.getElementById('randInt').checked;
+  var unique = document.getElementById('randUnique').checked;
+  var out = document.getElementById('randOut');
+  if (isNaN(min) || isNaN(max) || isNaN(count)){ out.textContent = '请输入有效的参数'; return; }
+  if (max < min){ out.textContent = '最大值不能小于最小值'; return; }
+  count = Math.max(1, Math.min(1000, count));
+  var vals = [];
+  if (isInt){
+    min = Math.ceil(min); max = Math.floor(max);
+    var range = max - min + 1;
+    if (range <= 0){ out.textContent = '整数范围为空'; return; }
+    if (unique && count > range){ out.textContent = '不重复整数数量超出范围（可用 ' + range + ' 个）'; return; }
+    if (unique){
+      var pool = [];
+      for (var i = min; i <= max; i++) pool.push(i);
+      for (var i = pool.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+      }
+      vals = pool.slice(0, count);
+    } else {
+      for (var i = 0; i < count; i++) vals.push(min + Math.floor(Math.random() * range));
+    }
+  } else {
+    for (var i = 0; i < count; i++) vals.push(parseFloat((min + Math.random() * (max - min)).toFixed(6)));
+  }
+  out.textContent = vals.join(', ');
+}
+
+/* ========== 22. UUID v4 ========== */
+function uuidv4(){
+  var bytes = new Uint8Array(16);
+  if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(bytes);
+  else for (var i = 0; i < 16; i++) bytes[i] = Math.floor(Math.random() * 256);
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  var hex = Array.from(bytes, function(b){ return ('0' + b.toString(16)).slice(-2); });
+  return hex[0]+hex[1]+hex[2]+hex[3] + '-' + hex[4]+hex[5] + '-' + hex[6]+hex[7] + '-' + hex[8]+hex[9] + '-' + hex[10]+hex[11]+hex[12]+hex[13]+hex[14]+hex[15];
+}
+
+function uuidGen(){
+  var n = parseInt(document.getElementById('uuidCount').value, 10) || 1;
+  n = Math.max(1, Math.min(20, n));
+  var out = [];
+  for (var i = 0; i < n; i++) out.push(uuidv4());
+  document.getElementById('uuidOut').textContent = out.join('\n');
+}
+
+/* ========== 23. CRC32 ========== */
+var crcTable = null;
+function crc32(s){
+  var bytes = new TextEncoder().encode(s);
+  if (!crcTable){
+    crcTable = new Array(256);
+    for (var n = 0; n < 256; n++){
+      var c = n;
+      for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      crcTable[n] = c >>> 0;
+    }
+  }
+  var crc = 0xFFFFFFFF;
+  for (var i = 0; i < bytes.length; i++) crc = crcTable[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+
+function calcCRC(){
+  var v = crc32(document.getElementById('crcIn').value);
+  document.getElementById('crcOut').textContent = '0x' + v.toString(16).toUpperCase().padStart(8, '0') + ' | 十进制: ' + v;
+}
+
+/* ========== 24. Variable Naming Convention ========== */
+function nameConv(){
+  var ids = ['nameCamel','namePascal','nameSnake','nameScream','nameKebab'];
+  var s = document.getElementById('nameIn').value.trim();
+  if (!s){ ids.forEach(function(id){ document.getElementById(id).textContent = ''; }); return; }
+  var parts = [];
+  s.replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+   .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+   .split(/[^A-Za-z0-9]+/)
+   .forEach(function(w){ if (w) parts.push(w.toLowerCase()); });
+  if (!parts.length){ ids.forEach(function(id){ document.getElementById(id).textContent = ''; }); return; }
+  var cap = function(p){ return p.charAt(0).toUpperCase() + p.slice(1); };
+  document.getElementById('nameCamel').textContent = parts[0] + parts.slice(1).map(cap).join('');
+  document.getElementById('namePascal').textContent = parts.map(cap).join('');
+  document.getElementById('nameSnake').textContent = parts.join('_');
+  document.getElementById('nameScream').textContent = parts.join('_').toUpperCase();
+  document.getElementById('nameKebab').textContent = parts.join('-');
+}
+
+/* ========== 25. Line Processing ========== */
+function linesProcess(mode){
+  var lines = document.getElementById('linesIn').value.split('\n');
+  switch (mode){
+    case 'empty': lines = lines.filter(function(l){ return l.trim() !== ''; }); break;
+    case 'dedup': lines = lines.filter(function(l, i){ return l.trim() !== '' && lines.indexOf(l) === i; }); break;
+    case 'sort': lines.sort(); break;
+    case 'sortdesc': lines.sort().reverse(); break;
+    case 'reverse': lines.reverse(); break;
+  }
+  document.getElementById('linesOut').value = lines.join('\n');
+}
+
+/* ========== 26. HTML Entities ========== */
+function htmlEncode(){
+  var s = document.getElementById('htmlIn').value;
+  document.getElementById('htmlOut').value = s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function htmlDecode(){
+  var s = document.getElementById('htmlIn').value;
+  var el = document.createElement('textarea');
+  el.innerHTML = s;
+  document.getElementById('htmlOut').value = el.value;
+}
+
+/* ========== 27. Morse Code ========== */
+var morseMap = { 'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---','K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-','U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.','.':'.-.-.-',',':'--..--','?':'..--..',"'":'.----.','!':'-.-.--','/':'-..-.','(':'-.--.',')':'-.--.-','&':'.-...',':':'---...',';':'-.-.-.','=':'-...-','+':'.-.-.','-':'-....-','_':'..--.-','"':'.-..-.','$':'...-..-','@':'.--.-.' };
+
+function morseEncode(){
+  var s = document.getElementById('morseIn').value.toUpperCase();
+  var words = [];
+  s.split(/\s+/).forEach(function(w){
+    if (!w) return;
+    var codes = [];
+    for (var i = 0; i < w.length; i++) codes.push(morseMap[w[i]] || '?');
+    words.push(codes.join(' '));
+  });
+  document.getElementById('morseOut').textContent = words.join(' / ');
+}
+
+function morseDecode(){
+  var rev = {};
+  for (var k in morseMap) rev[morseMap[k]] = k;
+  var s = document.getElementById('morseIn').value.trim();
+  var words = [];
+  s.split(/\s*\/\s*|\s{3,}/).forEach(function(w){
+    if (!w.trim()) return;
+    var chars = [];
+    w.trim().split(/\s+/).forEach(function(code){ chars.push(rev[code] || '?'); });
+    words.push(chars.join(''));
+  });
+  document.getElementById('morseOut').textContent = words.join(' ');
+}
+
+/* ========== 28. Chinese ID Card Check ========== */
+var provinceCodes = {11:'北京',12:'天津',13:'河北',14:'山西',15:'内蒙古',21:'辽宁',22:'吉林',23:'黑龙江',31:'上海',32:'江苏',33:'浙江',34:'安徽',35:'福建',36:'江西',37:'山东',41:'河南',42:'湖北',43:'湖南',44:'广东',45:'广西',46:'海南',50:'重庆',51:'四川',52:'贵州',53:'云南',54:'西藏',61:'陕西',62:'甘肃',63:'青海',64:'宁夏',65:'新疆',71:'台湾',81:'香港',82:'澳门'};
+
+function idCheck(){
+  var s = document.getElementById('idCard').value.trim();
+  var out = document.getElementById('idOut');
+  if (!/^\d{17}[\dXx]$/.test(s)){ out.textContent = '格式无效：需要 18 位数字（最后一位可为 X）'; return; }
+  var province = provinceCodes[parseInt(s.slice(0, 2), 10)];
+  if (!province){ out.textContent = '无效地区码: ' + s.slice(0, 2); return; }
+  var y = parseInt(s.slice(6, 10), 10), mo = parseInt(s.slice(10, 12), 10), d = parseInt(s.slice(12, 14), 10);
+  var dt = new Date(y, mo - 1, d);
+  if (dt.getFullYear() !== y || dt.getMonth() !== mo - 1 || dt.getDate() !== d){ out.textContent = '无效出生日期: ' + s.slice(6, 14); return; }
+  var weights = [7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2];
+  var codes = '10X98765432';
+  var sum = 0;
+  for (var i = 0; i < 17; i++) sum += parseInt(s.charAt(i), 10) * weights[i];
+  var expected = codes[sum % 11];
+  var ok = expected === s.charAt(17).toUpperCase();
+  var gender = (parseInt(s.charAt(16), 10) % 2 === 1) ? '男' : '女';
+  var now = new Date();
+  var age = now.getFullYear() - y - ((now.getMonth() + 1 > mo || (now.getMonth() + 1 === mo && now.getDate() >= d)) ? 0 : 1);
+  out.textContent =
+    (ok ? '✅ 校验位正确' : '❌ 校验位错误（应为 ' + expected + '）') +
+    '\n地区: ' + province + '（' + s.slice(0, 6) + '）' +
+    '\n出生日期: ' + y + ' 年 ' + mo + ' 月 ' + d + ' 日' +
+    '\n性别: ' + gender + ' | 年龄: ' + age + ' 岁';
+}
+
+/* ========== 29. Prime Factorization ========== */
+function factorize(){
+  var n = parseInt(document.getElementById('primeIn').value, 10);
+  var out = document.getElementById('primeOut');
+  if (isNaN(n)){ out.textContent = '请输入有效整数'; return; }
+  if (n < 2){ out.textContent = '请输入 ≥ 2 的整数'; return; }
+  if (n > 1000000000000){ out.textContent = '数值过大，暂只支持 ≤ 1,000,000,000,000'; return; }
+  var remaining = n;
+  var factors = [];
+  var d = 2;
+  while (d * d <= remaining){
+    while (remaining % d === 0){ factors.push(d); remaining /= d; }
+    d = d === 2 ? 3 : d + 2;
+  }
+  if (remaining > 1) factors.push(remaining);
+  var groups = [];
+  factors.forEach(function(f){
+    var last = groups[groups.length - 1];
+    if (last && last[0] === f) last[1]++;
+    else groups.push([f, 1]);
+  });
+  var isPrime = groups.length === 1 && groups[0][1] === 1;
+  var divisors = 1;
+  groups.forEach(function(g){ divisors *= (g[1] + 1); });
+  out.textContent =
+    (isPrime ? '✅ ' : '') + n + ' = ' + groups.map(function(g){ return g[1] === 1 ? g[0] : g[0] + '^' + g[1]; }).join(' × ') +
+    '\n素数: ' + (isPrime ? '是' : '否') +
+    '\n质因数个数: ' + factors.length + ' | 约数个数: ' + divisors;
+}
+
+/* ========== 30. GCD / LCM ========== */
+function gcdCalc(){
+  var a = parseInt(document.getElementById('gcdA').value, 10);
+  var b = parseInt(document.getElementById('gcdB').value, 10);
+  var out = document.getElementById('gcdOut');
+  if (isNaN(a) || isNaN(b)){ out.textContent = '请输入两个整数'; return; }
+  a = Math.abs(a); b = Math.abs(b);
+  if (a === 0 && b === 0){ out.textContent = '两个数不能同时为 0'; return; }
+  function gcd(x, y){ while (y){ var t = y; y = x % y; x = t; } return x; }
+  var g = gcd(a, b);
+  var l = (a / g) * b;
+  out.textContent = '最大公约数 (GCD): ' + g + '\n最小公倍数 (LCM): ' + l;
 }
