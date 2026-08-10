@@ -17,7 +17,29 @@
 
     <!-- Window -->
     <main class="content-overlay">
-        <div class="window" id="home" style="width: 700px" data-status="hidden">
+        <div class="window hidden" id="aka" style="width: 700px">
+            <div class="window-inner">
+                <div class="titlebar">
+                    <div class="titlebar-left">
+                        <span class="titlebar-app-icon"><img src="images/ICON163_1.ico" alt="aka" style="width: 16px; height: 16px;"></span>
+                        <span class="titlebar-text">aka</span>
+                    </div>
+                    <div class="titlebar-controls">
+                        <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
+                        <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
+                        <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+                    </div>
+                </div>
+
+                <div class="window-body">
+                    <h1>aka是一个文件下载小中转</h1>
+                    <p><a href="pages\aka\OI-Way-Resourcepack.html">OI-Way Resourcepack</a></p>
+                    <p><a href="pages\aka\OI-Way-Save.html">OI-Way Save</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="home" style="width: 700px">
             <div class="window-inner">
                 <div class="titlebar">
                     <div class="titlebar-left">
@@ -465,11 +487,16 @@
                                 <button type="button" class="btn-sm accent" onclick="nameConv()">转换</button>
                             </div>
                             <div style="margin-top:8px;">
-                                <label>camelCase</label><div class="result" id="nameCamel"></div>
-                                <label>PascalCase</label><div class="result" id="namePascal"></div>
-                                <label>snake_case</label><div class="result" id="nameSnake"></div>
-                                <label>SCREAMING_SNAKE</label><div class="result" id="nameScream"></div>
-                                <label>kebab-case</label><div class="result" id="nameKebab"></div>
+                                <label>camelCase</label>
+                                <div class="result" id="nameCamel"></div>
+                                <label>PascalCase</label>
+                                <div class="result" id="namePascal"></div>
+                                <label>snake_case</label>
+                                <div class="result" id="nameSnake"></div>
+                                <label>SCREAMING_SNAKE</label>
+                                <div class="result" id="nameScream"></div>
+                                <label>kebab-case</label>
+                                <div class="result" id="nameKebab"></div>
                             </div>
                         </div>
 
@@ -651,6 +678,40 @@
 
         const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
+        function getScalingEdge(event, $window) {
+            const numericX = parseFloat($window.style.left) || 0;
+            const numericY = parseFloat($window.style.top) || 0;
+            const distanceLeft = event.clientX - numericX;
+            const distanceTop = event.clientY - numericY;
+            const distanceRight = numericX + $window.offsetWidth - event.clientX;
+            const distanceBottom = numericY + $window.offsetHeight - event.clientY;
+            if (distanceLeft < 20) {
+                if (distanceTop < 20) {
+                    return ['left', 'top']
+                }
+                if (distanceBottom < 20) {
+                    return ['left', 'bottom']
+                }
+                return ['left']
+            }
+            if (distanceRight < 20) {
+                if (distanceTop < 20) {
+                    return ['right', 'top']
+                }
+                if (distanceBottom < 20) {
+                    return ['right', 'bottom']
+                }
+                return ['right']
+            }
+            if (distanceTop < 20) {
+                return ['top']
+            }
+            if (distanceBottom < 20) {
+                return ['bottom']
+            }
+            return []
+        }
+
         document.addEventListener("pointerdown", (event) => {
             const $titlebar = event.target.closest(".titlebar");
             if ($titlebar) {
@@ -661,7 +722,15 @@
             if ($window) {
                 setWindowTop($window)
             }
+            const $windowInner = event.target.closest(".window-inner");
+            if (!$windowInner && $window) {
+                window.$scalingWindow = $window
+                window.scalingEdge = getScalingEdge(event, $window)
+            }
         })
+
+        window.$scalingWindow = null;
+        window.scalingEdge = []
 
         document.addEventListener("pointermove", (event) => {
             if (window.$dragingWindow) {
@@ -681,6 +750,21 @@
 
                 window.$dragingWindow.style.setProperty('left', newValueX);
                 window.$dragingWindow.style.setProperty('top', newValueY);
+            }
+
+            const $window = event.target.closest(".window");
+            const $windowInner = event.target.closest(".window-inner");
+            if (!$windowInner && $window) {
+                $window.style.cursor = {
+                    'left': 'w-resize',
+                    'right': 'e-resize',
+                    'top': 'n-resize',
+                    'bottom': 's-resize',
+                    'left,top': 'nw-resize',
+                    'left,bottom': 'sw-resize',
+                    'right,top': 'ne-resize',
+                    'right,bottom': 'se-resize',
+                }[getScalingEdge(event, $window)];
             }
         })
 
