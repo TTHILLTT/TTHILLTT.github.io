@@ -110,6 +110,15 @@
   --shadow-window: 0 2px 8px rgba(0,0,0,0.15), 0 16px 48px rgba(0,0,0,0.18);
 
   --window-sheen: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.03) 100%);
+
+  .github-icon {
+    filter: invert(0);
+  }
+
+  .desktop.light {
+    opacity: 1;
+  }
+
 }
 
 /* ===== Reset & Base ===== */
@@ -130,11 +139,16 @@ html, body {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% -20%, var(--desktop-bloom-1) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 80% 80%, var(--desktop-bloom-2) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 60% at 20% 90%, var(--desktop-bloom-3) 0%, transparent 50%),
-    linear-gradient(170deg, var(--desktop-base-1) 0%, var(--desktop-base-2) 30%, var(--desktop-base-3) 60%, var(--desktop-base-4) 100%);
+    url("/images/win-bloom-dark.jpg");
+  background-position: center;
+  background-size: cover;
   z-index: 0;
+}
+
+.desktop.light {
+  opacity: 0;
+  background-image: url(/images/win-bloom-light.jpg);
+  transition: opacity 0.5s;
 }
 
 .desktop::after {
@@ -216,6 +230,7 @@ html, body {
 /* ===== Window Component ===== */
 .window {
   background: var(--surface-card);
+  transition: background-color 0.5s;
   backdrop-filter: blur(50px) saturate(1.8);
   -webkit-backdrop-filter: blur(50px) saturate(1.8);
   border: 1px solid var(--border-window);
@@ -223,10 +238,11 @@ html, body {
   box-shadow: var(--shadow-window);
   max-width: 900px;
   width: 100%;
-  animation: windowOpen 0.35s var(--ease-out);
-  position: relative;
+  position: fixed;
   pointer-events: auto;
   overflow: hidden;
+  left: 0;
+  top: 0;
 }
 
 .window::before {
@@ -238,9 +254,27 @@ html, body {
   pointer-events: none;
 }
 
+.window.animation {
+  animation: windowOpen 0.35s var(--ease-out);
+}
+
+.window.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.window.hidden.animation {
+  animation: windowClose 0.35s var(--ease-out);
+}
+
 @keyframes windowOpen {
   from { opacity: 0; transform: scale(0.92) translateY(12px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes windowClose {
+  from   { opacity: 1; transform: scale(1) translateY(0); }
+  to { opacity: 0; transform: scale(0.92) translateY(12px); }
 }
 
 /* ===== Win11 Title Bar ===== */
@@ -252,6 +286,7 @@ html, body {
   -webkit-user-select: none; user-select: none;
   position: relative;
   border-bottom: 1px solid var(--border-subtle);
+  touch-action: none;
 }
 
 .titlebar-left {
@@ -416,6 +451,9 @@ html, body {
   padding: 0 16px;
   z-index: 100;
   box-shadow: 0 -1px 4px rgba(0,0,0,0.06);
+  transition: background-color 0.5s;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .taskbar-center {
@@ -707,4 +745,27 @@ html, body {
   .taskbar-icon { width: 34px; height: 34px; }
   .desktop-icon { width: 68px; padding: 8px 4px; }
   .desktop-icon .d-icon { font-size: 28px; }
+}
+
+
+.github-icon {
+  height: 24px; 
+  filter: invert(1);
+  transition: filter 0.5s;
+}
+
+.window-content {
+  border: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #80808080;
+  width: 10px;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }

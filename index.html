@@ -1,107 +1,466 @@
 <!DOCTYPE html>
 <html lang="zh_cn" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/win11.css">
-    <script>var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);</script>
+    <script>var t = localStorage.getItem('theme') || 'dark'; document.documentElement.setAttribute('data-theme', t);</script>
     <title>Welcome!</title>
 </head>
+
 <body>
 
-<!-- Desktop Background -->
-<div class="desktop"></div>
+    <!-- Desktop Background -->
+    <div class="desktop"></div>
+    <div class="desktop light"></div>
 
-<!-- Desktop Icons -->
-<div class="desktop-icons">
-    <a class="desktop-icon" href="./pages/socialMedias.html">
-        <span class="d-icon">💬</span>
-        <span class="d-label">联系方式</span>
-    </a>
-    <a class="desktop-icon" href="./pages/NGGYU.html">
-        <span class="d-icon">⚠️</span>
-        <span class="d-label">千万别点</span>
-    </a>
-    <a class="desktop-icon" href="https://github.com/TTHILLTT" target="_blank" rel="noopener">
-        <span class="d-icon">🐙</span>
-        <span class="d-label">GitHub</span>
-    </a>
-    <a class="desktop-icon" href="./pages/tools.html">
-        <span class="d-icon">🧰</span>
-        <span class="d-label">有用的工具</span>
-    </a>
-</div>
-
-<!-- Window -->
-<main class="content-overlay">
-    <div class="window">
-        <div class="titlebar">
-            <div class="titlebar-left">
-                <span class="titlebar-app-icon">🌐</span>
-                <span class="titlebar-text">TTHILLTT</span>
+    <!-- Window -->
+    <main class="content-overlay">
+        <div class="window" id="home" style="width: 700px">
+            <div class="titlebar">
+                <div class="titlebar-left">
+                    <span class="titlebar-app-icon">🌐</span>
+                    <span class="titlebar-text">TTHILLTT</span>
+                </div>
+                <div class="titlebar-controls">
+                    <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
+                    <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
+                    <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+                </div>
             </div>
-            <div class="titlebar-controls">
-                <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
-                <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
-                <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+
+            <div class="window-body">
+                <h1>你好! 👋</h1>
+                <h2>这是 <strong>TTHILLTT</strong> 的网站</h2>
             </div>
         </div>
 
-        <div class="window-body">
-            <h1>你好! 👋</h1>
-            <h2>这是 <strong>TTHILLTT</strong> 的网站</h2>
-
-            <p class="text-center mx-16">
-                或许你可以在 <a class="link-subtle" href="https://github.com/TTHILLTT">GitHub</a> 上关注我！给我的项目发几个 PR 什么的！
-            </p>
-            <p class="text-center mx-12">
-                这是我的 <a class="link-subtle" href="./pages/socialMedias.html">联系方式</a>
-            </p>
-
-            <div class="flex-row mx-20">
-                <a class="btn-win11" href="./pages/NGGYU.html">⚠️ 千万别点</a>
+        <div class="window hidden" id="contact" style="width: 300px">
+            <div class="titlebar">
+                <div class="titlebar-left">
+                    <span class="titlebar-app-icon">🌐</span>
+                    <span class="titlebar-text">TTHILLTT</span>
+                </div>
+                <div class="titlebar-controls">
+                    <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
+                    <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
+                    <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+                </div>
             </div>
 
+            <div class="window-body">
+                <h1 class="text-center">📬 找到我</h1>
+                <h2 class="text-center">欢迎随时联系</h2>
+                <ul class="social-list">
+                    <li><a href="https://discord.gg/AKhsmgexMF">🎮 加入我的 Discord</a></li>
+                    <li><a href="mailto:kaoxiqi@qq.com">📧 kaoxiqi@qq.com</a></li>
+                    <li><a href="tel:18660696751">📞 +86 18660696751</a></li>
+                </ul>
+            </div>
         </div>
+
+        <div class="window hidden" id="nggyu" style="width: 1000px">
+            <div class="titlebar">
+                <div class="titlebar-left">
+                    <span class="titlebar-app-icon"><img src="./images/MediaPlayerAppList.targetsize-256_altform-unplated.png" alt="Media Player" style="height: 24px;"></span>
+                    <span class="titlebar-text">媒体播放器</span>
+                </div>
+                <div class="titlebar-controls">
+                    <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
+                    <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
+                    <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+                </div>
+            </div>
+
+            <div class="window-body window-body-tight">
+                <div class="video-container">
+                    <video id="nggyu-video" autoplay src="../images/NGGYU.mp4" controls></video>
+                </div>
+            </div>
+        </div>
+
+        <div class="window window-wide hidden" id="tools">
+            <div class="titlebar">
+                <div class="titlebar-left">
+                    <span class="titlebar-app-icon"><img src="./images/ICON1306_1.ico" alt="Tools" style="height: 24px;"></span>
+                    <span class="titlebar-text">工具箱</span>
+                </div>
+                <div class="titlebar-controls">
+                    <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
+                    <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
+                    <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+                </div>
+            </div>
+            <div class="window-body" style="max-height:72vh; overflow-y:auto; padding:20px 24px;">
+
+                <div class="tools-grid">
+
+                    <!-- 1. ISO-8859-1 Mojibake -->
+                    <div class="tool-card">
+                        <h3>📝 ISO-8859-1 乱码解码</h3>
+                        <label>输入乱码文本</label>
+                        <textarea id="mojiIn" rows="2" placeholder='例如: ä½ å¥½'></textarea>
+                        <div class="btn-row">
+                            <button type="button" class="btn-sm accent" onclick="mojiDecode()">解码 →</button>
+                            <button type="button" class="btn-sm" onclick="mojiEncode()">← 编码</button>
+                        </div>
+                        <label style="margin-top:8px;">结果</label>
+                        <div class="result" id="mojiOut"></div>
+                    </div>
+
+                    <!-- 2. URL Encode/Decode -->
+                    <div class="tool-card">
+                        <h3>🔗 URL 编码/解码</h3>
+                        <label>输入文本</label>
+                        <textarea id="urlIn" rows="2" placeholder="输入要编码或解码的文本"></textarea>
+                        <div class="btn-row">
+                            <button type="button" class="btn-sm accent" onclick="urlEncode()">编码 →</button>
+                            <button type="button" class="btn-sm" onclick="urlDecode()">← 解码</button>
+                        </div>
+                        <label style="margin-top:8px;">结果</label>
+                        <div class="result" id="urlOut"></div>
+                    </div>
+
+                    <!-- 3. Base64 Encode/Decode -->
+                    <div class="tool-card">
+                        <h3>🔐 Base64 编码/解码</h3>
+                        <label>输入文本</label>
+                        <textarea id="b64In" rows="2" placeholder="输入要编码或解码的文本"></textarea>
+                        <div class="btn-row">
+                            <button type="button" class="btn-sm accent" onclick="b64Encode()">编码 →</button>
+                            <button type="button" class="btn-sm" onclick="b64Decode()">← 解码</button>
+                        </div>
+                        <label style="margin-top:8px;">结果</label>
+                        <div class="result" id="b64Out"></div>
+                    </div>
+
+                    <!-- 4. Unicode / Chinese -->
+                    <div class="tool-card">
+                        <h3>🔤 Unicode 与中文 编码/解码</h3>
+                        <label>输入</label>
+                        <textarea id="uniIn" rows="2" placeholder="输入中文 或 \uXXXX 格式的 Unicode"></textarea>
+                        <div class="btn-row">
+                            <button type="button" class="btn-sm accent" onclick="uniEncode()">编码 → \uXXXX</button>
+                            <button type="button" class="btn-sm" onclick="uniDecode()">← 解码</button>
+                        </div>
+                        <label style="margin-top:8px;">结果</label>
+                        <div class="result" id="uniOut"></div>
+                    </div>
+
+                    <!-- 5. IEEE 754 Float -->
+                    <div class="tool-card">
+                        <h3>🔢 IEEE 754 浮点数转换</h3>
+                        <div class="inline-row" style="margin-bottom:8px;">
+                            <select id="floatPrec" style="flex:0 0 auto; width:auto;">
+                                <option value="32">32-bit (float)</option>
+                                <option value="64">64-bit (double)</option>
+                            </select>
+                        </div>
+                        <label>十进制数</label>
+                        <input type="text" id="floatDec" placeholder="例如: 3.14 或 -0.5">
+                        <div class="btn-row">
+                            <button type="button" class="btn-sm accent" onclick="floatToHex()">→ 十六进制</button>
+                            <button type="button" class="btn-sm" onclick="hexToFloat()">← 浮点数</button>
+                        </div>
+                        <label style="margin-top:8px;">十六进制</label>
+                        <input type="text" id="floatHex" placeholder="例如: 4048F5C3">
+                        <div class="result" id="floatDetail" style="margin-top:6px;"></div>
+                    </div>
+
+                    <!-- 6. Number Base Conversion -->
+                    <div class="tool-card">
+                        <h3>🔣 进制转换</h3>
+                        <div class="inline-row" style="margin-bottom:8px;">
+                            <label style="flex:0 0 auto;">从:</label>
+                            <select id="baseFrom" style="width:auto;">
+                                <option value="2">二进制</option>
+                                <option value="8">八进制</option>
+                                <option value="10" selected>十进制</option>
+                                <option value="16">十六进制</option>
+                            </select>
+                        </div>
+                        <input type="text" id="baseIn" placeholder="输入数值">
+                        <button type="button" class="btn-sm accent" onclick="baseConvert()" style="margin-top:8px;">转换</button>
+                        <div style="margin-top:8px;">
+                            <label>二进制</label>
+                            <div class="result" id="base2"></div>
+                            <label>八进制</label>
+                            <div class="result" id="base8"></div>
+                            <label>十进制</label>
+                            <div class="result" id="base10"></div>
+                            <label>十六进制</label>
+                            <div class="result" id="base16"></div>
+                        </div>
+                    </div>
+
+                    <!-- 7. 原码/反码/补码 -->
+                    <div class="tool-card">
+                        <h3>🧮 原码/反码/补码 计算器</h3>
+                        <div class="inline-row" style="margin-bottom:8px;">
+                            <input type="number" id="signedVal" placeholder="输入整数" style="flex:2;">
+                            <label style="flex:0 0 auto;">位宽:</label>
+                            <select id="signedBits" style="width:auto;">
+                                <option value="8">8</option>
+                                <option value="16">16</option>
+                                <option value="32" selected>32</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn-sm accent" onclick="calcSigned()">计算</button>
+                        <div style="margin-top:8px;">
+                            <label>原码 (Sign-Magnitude)</label>
+                            <div class="result" id="smResult"></div>
+                            <label>反码 (Ones' Complement)</label>
+                            <div class="result" id="ocResult"></div>
+                            <label>补码 (Two's Complement)</label>
+                            <div class="result" id="tcResult"></div>
+                        </div>
+                    </div>
+
+                    <!-- 8. chmod Calculator -->
+                    <div class="tool-card">
+                        <h3>🔒 chmod 计算器</h3>
+                        <table class="chmod-grid">
+                            <tr>
+                                <td></td>
+                                <td class="head">Owner</td>
+                                <td class="head">Group</td>
+                                <td class="head">Other</td>
+                            </tr>
+                            <tr>
+                                <td class="head">Read</td>
+                                <td><input type="checkbox" id="cr0" onchange="chmodUpdate()" checked></td>
+                                <td><input type="checkbox" id="cr1" onchange="chmodUpdate()" checked></td>
+                                <td><input type="checkbox" id="cr2" onchange="chmodUpdate()" checked></td>
+                            </tr>
+                            <tr>
+                                <td class="head">Write</td>
+                                <td><input type="checkbox" id="cw0" onchange="chmodUpdate()" checked></td>
+                                <td><input type="checkbox" id="cw1" onchange="chmodUpdate()"></td>
+                                <td><input type="checkbox" id="cw2" onchange="chmodUpdate()"></td>
+                            </tr>
+                            <tr>
+                                <td class="head">Exec</td>
+                                <td><input type="checkbox" id="cx0" onchange="chmodUpdate()"></td>
+                                <td><input type="checkbox" id="cx1" onchange="chmodUpdate()"></td>
+                                <td><input type="checkbox" id="cx2" onchange="chmodUpdate()"></td>
+                            </tr>
+                        </table>
+                        <div class="inline-row" style="margin-top:8px;">
+                            <input type="text" id="chmodNum" placeholder="例如: 755" oninput="chmodFromNum()" style="flex:1;">
+                            <span class="fixed" style="font-weight:600;" id="chmodSym">rwxr-xr-x</span>
+                        </div>
+                    </div>
+
+                    <!-- 9. PPI Calculator -->
+                    <div class="tool-card">
+                        <h3>📱 屏幕 PPI 计算器</h3>
+                        <div class="inline-row">
+                            <input type="number" id="ppiW" placeholder="水平像素" value="1920">
+                            <span class="fixed">×</span>
+                            <input type="number" id="ppiH" placeholder="垂直像素" value="1080">
+                        </div>
+                        <label style="margin-top:8px;">屏幕尺寸 (英寸)</label>
+                        <input type="number" id="ppiSize" placeholder="例如: 24" value="24" step="0.1">
+                        <button type="button" class="btn-sm accent" onclick="calcPPI()" style="margin-top:8px;">计算</button>
+                        <div class="result" id="ppiResult" style="margin-top:8px;"></div>
+                    </div>
+
+                    <!-- 10. IPv4 to IPv6 -->
+                    <div class="tool-card">
+                        <h3>🌐 IPv4 转 IPv6</h3>
+                        <label>IPv4 地址</label>
+                        <input type="text" id="ipv4In" placeholder="例如: 192.168.1.1">
+                        <button type="button" class="btn-sm accent" onclick="ipv4to6()" style="margin-top:8px;">转换</button>
+                        <label style="margin-top:8px;">IPv4-mapped IPv6</label>
+                        <div class="result" id="ipv6Out"></div>
+                        <label>完整 IPv6</label>
+                        <div class="result" id="ipv6Full"></div>
+                    </div>
+
+                    <!-- 11. RMB Uppercase -->
+                    <div class="tool-card">
+                        <h3>💴 人民币大写转换</h3>
+                        <label>金额 (数字)</label>
+                        <input type="text" id="rmbIn" placeholder="例如: 12345.67">
+                        <button type="button" class="btn-sm accent" onclick="rmbConvert()" style="margin-top:8px;">转换</button>
+                        <label style="margin-top:8px;">大写</label>
+                        <div class="result" id="rmbOut"></div>
+                    </div>
+
+                    <!-- 12. Unit Conversion -->
+                    <div class="tool-card">
+                        <h3>📏 单位换算</h3>
+                        <select id="unitCat" onchange="unitCatChange()">
+                            <option value="length">长度</option>
+                            <option value="weight">重量</option>
+                            <option value="temp">温度</option>
+                            <option value="area">面积</option>
+                            <option value="volume">体积</option>
+                            <option value="speed">速度</option>
+                        </select>
+                        <div class="inline-row" style="margin-top:8px;">
+                            <input type="number" id="unitVal" placeholder="数值" value="1">
+                            <select id="unitFrom"></select>
+                            <span class="fixed">→</span>
+                            <select id="unitTo"></select>
+                        </div>
+                        <div class="result" id="unitResult" style="margin-top:8px;"></div>
+                    </div>
+
+                    <!-- 13. MD5 Hash -->
+                    <div class="tool-card">
+                        <h3>🔑 MD5 Hash</h3>
+                        <label>输入文本</label>
+                        <textarea id="md5In" rows="2" placeholder="输入要计算 MD5 的文本"></textarea>
+                        <button type="button" class="btn-sm accent" onclick="calcMD5()" style="margin-top:8px;">计算 MD5</button>
+                        <label style="margin-top:8px;">MD5 (小写)</label>
+                        <div class="result" id="md5Lower"></div>
+                        <label>MD5 (大写)</label>
+                        <div class="result" id="md5Upper"></div>
+                    </div>
+
+                </div><!-- .tools-grid -->
+
+            </div>
+        </div>
+    </main>
+
+    <div class="desktop-icons">
+        <a class="desktop-icon" href="./pages/socialMedias.html">
+            <span class="d-icon"><img src="./images/ICON109_1.ico" alt="This PC" style="height: 48px;"></span>
+            <span class="d-label">此电脑</span>
+        </a>
     </div>
-</main>
 
-<footer class="taskbar">
-    <div class="taskbar-center">
-        <a class="taskbar-icon active" href="./index.html" title="Home">🏠</a>
-        <a class="taskbar-icon" href="https://github.com/TTHILLTT" title="GitHub" target="_blank" rel="noopener">🐙</a>
-        <a class="taskbar-icon" href="./pages/socialMedias.html" title="Contact">💬</a>
-        <a class="taskbar-icon" href="./pages/NGGYU.html" title="NGGYU">⚠️</a>
-        <a class="taskbar-icon" href="./pages/tools.html" title="Tools">🧰</a>
-    </div>
-    <div class="taskbar-right">
-        <button type="button" class="theme-toggle" id="themeToggle" title="切换深浅色模式" aria-label="切换深浅色模式">☀️</button>
-        <span id="clock"></span>
-    </div>
-</footer>
+    <footer class="taskbar" id="taskbar">
+        <div class="taskbar-center">
+            <a class="taskbar-icon" title="Wlogo" data-window="wlogo"><img src="./images/@WLOGO_96x96.png" alt="Wlogo" style="height: 24px;"></a>
+            <a class="taskbar-icon" title="Explorer" data-window="explorer"><img src="./images/ICON5325_1.ico" alt="explorer" style="height: 24px;"></a>
+            <a class="taskbar-icon active" title="Home" data-window="home"><img src="./images/ICON51380_1.ico" alt="home" style="height: 24px;"></a>
+            <a class="taskbar-icon" href="https://github.com/TTHILLTT" title="GitHub" target="_blank" rel="noopener"><img src="./images/GitHub.svg" class="github-icon" alt="GitHub"></a>
+            <a class="taskbar-icon" title="Contact" data-window="contact"><img src="./images/FeedbackHubAppList.targetsize-96_altform-unplated.png" alt="Contact" style="height: 24px;"></a>
+            <a class="taskbar-icon" title="NGGYU" data-window="nggyu"><img src="./images/MediaPlayerAppList.targetsize-256_altform-unplated.png" alt="NGGYU" style="height: 24px;"></a>
+            <a class="taskbar-icon" title="Tools" data-window="tools"><img src="./images/ICON1306_1.ico" alt="tools" style="height: 24px;"></a>
+            <a class="taskbar-icon" title="aka" data-window="aka"><img src="./images/ICON163_1.ico" alt="aka" style="height: 24px;"></a>
+        </div>
+        <div class="taskbar-right">
+            <button type="button" class="theme-toggle" id="themeToggle" title="切换深浅色模式" aria-label="切换深浅色模式">☀️</button>
+            <span id="clock"></span>
+        </div>
+    </footer>
 
-<script>
-(function(){
-    var theme = document.documentElement.getAttribute('data-theme');
-    var btn = document.getElementById('themeToggle');
-    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-})();
+    <script>
+        (function () {
+            var theme = document.documentElement.getAttribute('data-theme');
+            var btn = document.getElementById('themeToggle');
+            if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        })();
 
-document.getElementById('themeToggle').addEventListener('click', function(){
-    var current = document.documentElement.getAttribute('data-theme');
-    var next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    this.textContent = next === 'dark' ? '☀️' : '🌙';
-    localStorage.setItem('theme', next);
-});
+        document.getElementById('themeToggle').addEventListener('click', function () {
+            var current = document.documentElement.getAttribute('data-theme');
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            this.textContent = next === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('theme', next);
+        });
 
-(function tick() {
-    var d = new Date();
-    document.getElementById('clock').textContent =
-        d.toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'}) + '  ' +
-        d.toLocaleDateString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit'});
-    requestAnimationFrame(function(){ setTimeout(tick, 1000 - Date.now() % 1000); });
-})();
-</script>
+        (function tick() {
+            var d = new Date();
+            document.getElementById('clock').textContent =
+                d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) + '  ' +
+                d.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            requestAnimationFrame(function () { setTimeout(tick, 1000 - Date.now() % 1000); });
+        })();
+
+        window.$dragingWindow = null;
+        window.currentZIndex = 0;
+
+        /**
+         * 调整元素的数值型 CSS 属性
+         * @param {HTMLElement} el - DOM 元素
+         * @param {string} prop - CSS 属性名 (支持 kebab-case 如 'font-size' 或 camelCase 'fontSize')
+         * @param {number} delta - 变化量 (正数增加，负数减少)
+         * @param {string} defaultUnit - 当获取不到单位时默认使用 'px'
+         */
+        function adjustStyle(el, prop, delta, defaultUnit = 'px') {
+            // 1. 获取计算后的样式（兼容外部样式表）
+            const computed = getComputedStyle(el);
+            // 2. 获取当前值（字符串，如 "16px", "2rem", "auto"）
+            const currentValue = computed.getPropertyValue(prop);
+
+            // 3. 提取数值部分（如果是 "auto" 或 "none" 等非数值，则默认为 0）
+            const numeric = parseFloat(currentValue) || 0;
+
+            // 4. 提取单位部分（去掉数字、正负号、小数点）
+            const unit = currentValue.replace(/[\d.\-]/g, '') || defaultUnit;
+
+            // 5. 计算新值并赋值（注意：用 style.setProperty 兼容 kebab-case）
+            const newValue = (numeric + delta) + unit;
+            el.style.setProperty(prop, newValue);
+        }
+
+        document.addEventListener("pointerdown", (event) => {
+            const $titlebar = event.target.closest(".titlebar");
+            if ($titlebar) {
+                window.$dragingWindow = $titlebar.closest(".window");
+                event.preventDefault();
+            }
+            const $window = event.target.closest(".window");
+            if ($window) {
+                $window.style.zIndex = ++window.currentZIndex;
+                document.getElementById("taskbar").style.zIndex = window.currentZIndex + 1;
+            }
+        })
+
+        document.addEventListener("pointermove", (event) => {
+            if (window.$dragingWindow) {
+                adjustStyle(window.$dragingWindow, 'left', event.movementX);
+                adjustStyle(window.$dragingWindow, 'top', event.movementY);
+            }
+        })
+
+        document.addEventListener("pointerup", (event) => {
+            window.$dragingWindow = null;
+        })
+
+        document.addEventListener("click", (event) => {
+            const $close = event.target.closest(".win-ctrl-btn.close");
+            if ($close) {
+                const $window = $close.closest(".window");
+                $window.classList.add("hidden", "animation");
+                document.querySelector(`.taskbar-icon[data-window=${$window.id}]`).classList.remove("active");
+
+                if ($window.id === "nggyu") {
+                    document.getElementById("nggyu-video").pause();
+                }
+            }
+
+            const $taskbarIcon = event.target.closest(".taskbar-icon");
+            if ($taskbarIcon) {
+                const windowID = $taskbarIcon.dataset.window;
+                const $window = document.getElementById(windowID);
+                $window.classList.add("animation");
+                if ($window.classList.contains("hidden")) {
+                    $window.classList.remove("hidden");
+                    $taskbarIcon.classList.add("active");
+
+                    if (windowID === "nggyu") {
+                        document.getElementById("nggyu-video").play();
+                    }
+                } else {
+                    $window.classList.add("hidden");
+                    $taskbarIcon.classList.remove("active");
+
+                    if (windowID === "nggyu") {
+                        document.getElementById("nggyu-video").pause();
+                    }
+                }
+            }
+        })
+    </script>
+
+    <script src="./scripts/tools.js"></script>
 </body>
+
 </html>
