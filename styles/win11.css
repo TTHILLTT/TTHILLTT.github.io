@@ -737,6 +737,7 @@ body {
   padding: 16px;
   box-shadow: var(--shadow-sm);
   transition: all 0.15s;
+  position: relative;
 }
 
 .tool-card:hover {
@@ -877,6 +878,144 @@ body {
   font-size: 10px;
   color: var(--text-tertiary);
   text-transform: uppercase;
+}
+
+/* ===== Toolbox Toolbar & UX ===== */
+.tools-toolbar {
+  margin: -20px -24px 14px;
+  padding: 14px 24px 12px;
+  background: var(--surface-overlay);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.tools-search {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--surface-input);
+  transition: border-color 0.15s;
+}
+
+.tools-search:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.tools-search::placeholder {
+  color: var(--text-tertiary);
+}
+
+.tools-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border-input);
+  background: var(--surface-solid);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-family: inherit;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.chip:hover {
+  background: var(--hover-bg-strong);
+}
+
+.chip.active {
+  background: var(--accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+.chip .chip-count {
+  font-size: 10px;
+  opacity: 0.75;
+}
+
+.chip.active .chip-count {
+  opacity: 0.9;
+}
+
+.tools-count {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.tools-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-tertiary);
+  padding: 28px 0;
+  font-size: 13px;
+}
+
+/* 卡片复制按钮 */
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  padding: 3px 10px;
+  font-size: 11px;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.12s;
+}
+
+.tool-card:hover .copy-btn,
+.tool-card:focus-within .copy-btn,
+.copy-btn:focus-visible,
+.copy-btn.copied {
+  opacity: 1;
+}
+
+.copy-btn.copied {
+  background: var(--accent);
+  color: #fff;
+  border-color: transparent;
+}
+
+/* 筛选显隐动画 */
+.tool-card.tool-reveal {
+  animation: toolReveal 0.25s var(--ease-out);
+}
+
+@keyframes toolReveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .copy-btn {
+    opacity: 1;
+  }
 }
 
 /* ===== Utility Classes ===== */

@@ -852,3 +852,130 @@ function gcdCalc(){
   var l = (a / g) * b;
   out.textContent = '最大公约数 (GCD): ' + g + '\n最小公倍数 (LCM): ' + l;
 }
+
+/* ========== 工具箱 UI：搜索 / 分类筛选 / 复制 / 回车执行 ========== */
+(function initToolboxUI(){
+  var grid = document.querySelector('.tools-grid');
+  var search = document.getElementById('toolSearch');
+  var chipsBox = document.getElementById('toolChips');
+  var countEl = document.getElementById('toolCount');
+  var emptyEl = document.getElementById('toolEmpty');
+  if (!grid || !search || !countEl) return; // 页面没有工具箱时跳过
+
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.tool-card'));
+  var currentFilter = 'all';
+  var currentQuery = '';
+
+  function refreshChipCounts(){
+    if (!chipsBox) return;
+    Array.prototype.forEach.call(chipsBox.querySelectorAll('.chip'), function(chip){
+      var f = chip.getAttribute('data-filter');
+      var n = f === 'all' ? cards.length
+        : cards.filter(function(c){ return c.getAttribute('data-category') === f; }).length;
+      var span = chip.querySelector('.chip-count');
+      if (span) span.textContent = n;
+    });
+  }
+
+  function applyFilter(){
+    var visible = 0;
+    cards.forEach(function(card){
+      var cat = card.getAttribute('data-category');
+      var matchCat = currentFilter === 'all' || cat === currentFilter;
+      var matchQuery = !currentQuery || card.textContent.toLowerCase().indexOf(currentQuery) !== -1;
+      var show = matchCat && matchQuery;
+      card.style.display = show ? '' : 'none';
+      if (show){
+        visible++;
+        card.classList.remove('tool-reveal');
+        void card.offsetWidth; // 强制重排以重启动画
+        card.classList.add('tool-reveal');
+      }
+    });
+    countEl.textContent = visible + ' / ' + cards.length + ' 个工具';
+    if (emptyEl) emptyEl.style.display = visible ? 'none' : '';
+  }
+
+  search.addEventListener('input', function(){
+    currentQuery = this.value.trim().toLowerCase();
+    applyFilter();
+  });
+
+  if (chipsBox){
+    chipsBox.addEventListener('click', function(e){
+      var chip = e.target.closest ? e.target.closest('.chip') : null;
+      if (!chip) return;
+      Array.prototype.forEach.call(chipsBox.querySelectorAll('.chip'), function(c){
+        c.classList.remove('active');
+      });
+      chip.classList.add('active');
+      currentFilter = chip.getAttribute('data-filter');
+      applyFilter();
+    });
+  }
+
+  function flashCopyBtn(btn, msg){
+    var old = btn.textContent;
+    btn.textContent = msg;
+    btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+  }
+
+  function copyText(text){
+    if (navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function(resolve, reject){
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        resolve();
+      } catch(e){ reject(e); }
+    });
+  }
+
+  // 给每张卡片加复制按钮
+  cards.forEach(function(card){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn-sm copy-btn';
+    btn.textContent = '复制';
+    btn.title = '复制本工具的全部结果';
+    btn.setAttribute('aria-label', '复制本工具的全部结果');
+    btn.addEventListener('click', function(){
+      var parts = [];
+      Array.prototype.forEach.call(card.querySelectorAll('.result'), function(r){
+        if (r.textContent.trim()) parts.push(r.textContent.trim());
+      });
+      Array.prototype.forEach.call(card.querySelectorAll('textarea[readonly]'), function(t){
+        if (t.value.trim()) parts.push(t.value.trim());
+      });
+      if (!parts.length){ flashCopyBtn(btn, '无结果'); return; }
+      copyText(parts.join('\n\n')).then(
+        function(){ flashCopyBtn(btn, '已复制 ✓'); },
+        function(){ flashCopyBtn(btn, '失败'); }
+      );
+    });
+    card.appendChild(btn);
+  });
+
+  // 输入框/下拉框里按回车，触发当前卡片的主操作
+  grid.addEventListener('keydown', function(e){
+    if (e.key !== 'Enter') return;
+    var t = e.target;
+    if (!t || (t.tagName !== 'INPUT' && t.tagName !== 'SELECT')) return;
+    if (t.type === 'checkbox' || t.type === 'color' || t.type === 'button' || t.type === 'submit') return;
+    e.preventDefault();
+    var card = t.closest ? t.closest('.tool-card') : null;
+    var btn = card && card.querySelector('.btn-sm.accent');
+    if (btn) btn.click();
+  });
+
+  refreshChipCounts();
+  applyFilter();
+})();
