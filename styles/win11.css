@@ -3,31 +3,31 @@
 
 /* ===== Theme: Dark (default) ===== */
 :root {
-  --accent: #0078D4;
-  --accent-hover: #1a8ad4;
-  --accent-light: rgba(0,120,212,0.15);
+  --accent: #4CC2FF;
+  --accent-hover: #4CC2FF;
+  --accent-light: rgba(0, 120, 212, 0.15);
 
   /* Desktop */
-  --desktop-bloom-1: rgba(100,180,255,0.5);
-  --desktop-bloom-2: rgba(120,100,200,0.22);
-  --desktop-bloom-3: rgba(60,120,200,0.28);
+  --desktop-bloom-1: rgba(100, 180, 255, 0.5);
+  --desktop-bloom-2: rgba(120, 100, 200, 0.22);
+  --desktop-bloom-3: rgba(60, 120, 200, 0.28);
   --desktop-base-1: #141e2b;
   --desktop-base-2: #1a2838;
   --desktop-base-3: #162230;
   --desktop-base-4: #111a26;
   --desktop-noise-opacity: 0.03;
   --desktop-icon-color: #fff;
-  --desktop-icon-shadow: rgba(0,0,0,0.5);
-  --desktop-icon-hover-bg: rgba(255,255,255,0.10);
-  --desktop-icon-hover-border: rgba(255,255,255,0.15);
-  --desktop-icon-active-bg: rgba(255,255,255,0.15);
+  --desktop-icon-shadow: rgba(0, 0, 0, 0.5);
+  --desktop-icon-hover-bg: rgba(255, 255, 255, 0.10);
+  --desktop-icon-hover-border: rgba(255, 255, 255, 0.15);
+  --desktop-icon-active-bg: rgba(255, 255, 255, 0.15);
 
   /* Surface */
-  --surface-card: rgba(30,30,35,0.85);
+  --surface-card: rgba(30, 30, 35, 0.85);
   --surface-solid: #2d2d2d;
-  --surface-overlay: rgba(40,40,45,0.75);
-  --surface-input: rgba(15,15,20,0.55);
-  --surface-result: rgba(255,255,255,0.04);
+  --surface-overlay: rgba(40, 40, 45, 0.75);
+  --surface-input: rgba(15, 15, 20, 0.55);
+  --surface-result: rgba(255, 255, 255, 0.04);
   --surface-iframe: #1a1a1e;
 
   /* Text */
@@ -36,27 +36,27 @@
   --text-tertiary: #707070;
 
   /* Border */
-  --border-subtle: rgba(255,255,255,0.05);
-  --border-card: rgba(255,255,255,0.07);
-  --border-input: rgba(255,255,255,0.10);
-  --border-window: rgba(255,255,255,0.10);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-card: rgba(255, 255, 255, 0.07);
+  --border-input: rgba(255, 255, 255, 0.10);
+  --border-window: rgba(255, 255, 255, 0.10);
 
   /* Hover */
-  --hover-bg: rgba(255,255,255,0.05);
-  --hover-bg-strong: rgba(255,255,255,0.08);
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --hover-bg-strong: rgba(255, 255, 255, 0.08);
 
   /* Taskbar */
-  --taskbar-bg: rgba(25,25,30,0.88);
-  --taskbar-border: rgba(255,255,255,0.06);
+  --taskbar-bg: rgba(25, 25, 30, 0.88);
+  --taskbar-border: rgba(255, 255, 255, 0.06);
 
   /* Shadow */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.35);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.45);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.55);
-  --shadow-window: 0 2px 8px rgba(0,0,0,0.4), 0 16px 48px rgba(0,0,0,0.5);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.55);
+  --shadow-window: 0 2px 8px rgba(0, 0, 0, 0.4), 0 16px 48px rgba(0, 0, 0, 0.5);
 
   /* Window sheen */
-  --window-sheen: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%, rgba(0,0,0,0.12) 100%);
+  --window-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%, rgba(0, 0, 0, 0.12) 100%);
 
   /* Shape */
   --radius-sm: 6px;
@@ -69,47 +69,47 @@
 
 /* ===== Theme: Light ===== */
 [data-theme="light"] {
-  --desktop-bloom-1: rgba(160,200,255,0.6);
-  --desktop-bloom-2: rgba(200,160,220,0.28);
-  --desktop-bloom-3: rgba(120,180,220,0.25);
+  --desktop-bloom-1: rgba(160, 200, 255, 0.6);
+  --desktop-bloom-2: rgba(200, 160, 220, 0.28);
+  --desktop-bloom-3: rgba(120, 180, 220, 0.25);
   --desktop-base-1: #eaf0f8;
   --desktop-base-2: #e0e8f2;
   --desktop-base-3: #d8e2ee;
   --desktop-base-4: #cdd8e6;
   --desktop-icon-color: #1a1a1a;
-  --desktop-icon-shadow: rgba(255,255,255,0.6);
-  --desktop-icon-hover-bg: rgba(0,0,0,0.05);
-  --desktop-icon-hover-border: rgba(0,0,0,0.10);
-  --desktop-icon-active-bg: rgba(0,0,0,0.10);
+  --desktop-icon-shadow: rgba(255, 255, 255, 0.6);
+  --desktop-icon-hover-bg: rgba(0, 0, 0, 0.05);
+  --desktop-icon-hover-border: rgba(0, 0, 0, 0.10);
+  --desktop-icon-active-bg: rgba(0, 0, 0, 0.10);
 
-  --surface-card: rgba(255,255,255,0.72);
+  --surface-card: rgba(255, 255, 255, 0.72);
   --surface-solid: #f3f3f3;
-  --surface-overlay: rgba(255,255,255,0.55);
-  --surface-input: rgba(255,255,255,0.8);
-  --surface-result: rgba(0,0,0,0.03);
+  --surface-overlay: rgba(255, 255, 255, 0.55);
+  --surface-input: rgba(255, 255, 255, 0.8);
+  --surface-result: rgba(0, 0, 0, 0.03);
   --surface-iframe: #fff;
 
   --text-primary: #1a1a1a;
   --text-secondary: #5a5a5a;
   --text-tertiary: #8a8a8a;
 
-  --border-subtle: rgba(0,0,0,0.06);
-  --border-card: rgba(0,0,0,0.06);
-  --border-input: rgba(0,0,0,0.12);
-  --border-window: rgba(255,255,255,0.25);
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-card: rgba(0, 0, 0, 0.06);
+  --border-input: rgba(0, 0, 0, 0.12);
+  --border-window: rgba(255, 255, 255, 0.25);
 
-  --hover-bg: rgba(0,0,0,0.05);
-  --hover-bg-strong: rgba(0,0,0,0.08);
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  --hover-bg-strong: rgba(0, 0, 0, 0.08);
 
-  --taskbar-bg: rgba(243,243,243,0.80);
-  --taskbar-border: rgba(0,0,0,0.08);
+  --taskbar-bg: rgba(243, 243, 243, 0.80);
+  --taskbar-border: rgba(0, 0, 0, 0.08);
 
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.18);
-  --shadow-window: 0 2px 8px rgba(0,0,0,0.15), 0 16px 48px rgba(0,0,0,0.18);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.18);
+  --shadow-window: 0 2px 8px rgba(0, 0, 0, 0.15), 0 16px 48px rgba(0, 0, 0, 0.18);
 
-  --window-sheen: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.03) 100%);
+  --window-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.03) 100%);
 
   .github-icon {
     filter: invert(0);
@@ -122,10 +122,18 @@
 }
 
 /* ===== Reset & Base ===== */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-html, body {
-  width: 100%; height: 100%;
+html,
+body {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   font-family: 'Noto Sans SC', 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
   font-size: 14px;
@@ -189,7 +197,8 @@ html, body {
   cursor: pointer;
   transition: all 0.1s;
   pointer-events: auto;
-  -webkit-user-select: none; user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .desktop-icon:hover {
@@ -205,7 +214,7 @@ html, body {
   font-size: 36px;
   line-height: 1;
   margin-bottom: 4px;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
   pointer-events: none;
 }
 
@@ -229,20 +238,26 @@ html, body {
 
 /* ===== Window Component ===== */
 .window {
-  background: var(--surface-card);
-  transition: background-color 0.5s;
-  backdrop-filter: blur(50px) saturate(1.8);
-  -webkit-backdrop-filter: blur(50px) saturate(1.8);
-  border: 1px solid var(--border-window);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-window);
   max-width: 900px;
   width: 100%;
   position: fixed;
   pointer-events: auto;
-  overflow: hidden;
   left: 0;
   top: 0;
+  padding: 10px;
+  cursor: ew-resize;
+}
+
+.window-inner {
+  background: var(--surface-card);
+  transition: background-color 0.5s;
+  -webkit-backdrop-filter: blur(50px) saturate(1.8);
+  backdrop-filter: blur(50px) saturate(1.8);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-window);
+  border: 1px solid var(--border-window);
+  overflow: hidden;
+  cursor: auto;
 }
 
 .window::before {
@@ -268,13 +283,27 @@ html, body {
 }
 
 @keyframes windowOpen {
-  from { opacity: 0; transform: scale(0.92) translateY(12px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @keyframes windowClose {
-  from   { opacity: 1; transform: scale(1) translateY(0); }
-  to { opacity: 0; transform: scale(0.92) translateY(12px); }
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
 }
 
 /* ===== Win11 Title Bar ===== */
@@ -283,7 +312,8 @@ html, body {
   align-items: center;
   height: 32px;
   padding-left: 16px;
-  -webkit-user-select: none; user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
   position: relative;
   border-bottom: 1px solid var(--border-subtle);
   touch-action: none;
@@ -334,11 +364,24 @@ html, body {
   line-height: 1;
   border-radius: 0;
 }
-.win-ctrl-btn:hover  { background: var(--hover-bg); }
-.win-ctrl-btn:active { background: var(--hover-bg-strong); }
 
-.win-ctrl-btn.close:hover  { background: #E81123; color: #fff; }
-.win-ctrl-btn.close:active { background: #BF0F1B; color: #fff; }
+.win-ctrl-btn:hover {
+  background: var(--hover-bg);
+}
+
+.win-ctrl-btn:active {
+  background: var(--hover-bg-strong);
+}
+
+.win-ctrl-btn.close:hover {
+  background: #E81123;
+  color: #fff;
+}
+
+.win-ctrl-btn.close:active {
+  background: #BF0F1B;
+  color: #fff;
+}
 
 /* ===== Window Body ===== */
 .window-body {
@@ -383,14 +426,17 @@ html, body {
   text-decoration: none;
   cursor: pointer;
   transition: all 0.15s var(--ease-out);
-  -webkit-user-select: none; user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
+
 .btn-win11:hover {
   background: var(--hover-bg-strong);
   border-color: var(--border-input);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
 }
+
 .btn-win11:active {
   transform: translateY(0);
   background: var(--hover-bg);
@@ -401,11 +447,15 @@ html, body {
   color: #fff;
   border-color: transparent;
 }
+
 .btn-win11.accent:hover {
   background: var(--accent-hover);
-  box-shadow: 0 2px 8px rgba(0,120,212,0.3);
+  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
 }
-.btn-win11.accent:active { background: #0060b0; }
+
+.btn-win11.accent:active {
+  background: #0060b0;
+}
 
 /* ===== Cards ===== */
 .card-grid {
@@ -427,19 +477,31 @@ html, body {
   transition: all 0.2s var(--ease-out);
   box-shadow: var(--shadow-sm);
 }
+
 .card:hover {
   background: var(--surface-card);
-  border-color: rgba(0,120,212,0.3);
+  border-color: rgba(0, 120, 212, 0.3);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
-.card-icon { font-size: 28px; margin-bottom: 8px; display: block; }
-.card-title { font-size: 13px; font-weight: 500; }
+
+.card-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 500;
+}
 
 /* ===== Taskbar ===== */
 .taskbar {
   position: fixed;
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 50px;
   background: var(--taskbar-bg);
   backdrop-filter: blur(30px) saturate(2);
@@ -450,7 +512,7 @@ html, body {
   justify-content: center;
   padding: 0 16px;
   z-index: 100;
-  box-shadow: 0 -1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.06);
   transition: background-color 0.5s;
   -webkit-user-select: none;
   user-select: none;
@@ -466,7 +528,8 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px; height: 38px;
+  width: 40px;
+  height: 38px;
   border-radius: var(--radius-sm);
   border: none;
   background: transparent;
@@ -477,15 +540,74 @@ html, body {
   transition: all 0.12s var(--ease-out);
   position: relative;
 }
-.taskbar-icon:hover { background: var(--hover-bg); }
-.taskbar-icon.active { background: var(--hover-bg-strong); }
-.taskbar-icon.active::after {
+
+.taskbar-icon:hover {
+  background: var(--hover-bg);
+}
+
+.taskbar-icon.active {
+  background: var(--hover-bg-strong);
+}
+
+.taskbar-icon>* {
+  transition: transform 0.12s var(--ease-out);
+}
+
+.taskbar-icon:active>* {
+  transform: scale(0.8);
+}
+
+.taskbar-icon::after {
   content: '';
   position: absolute;
   bottom: 2px;
-  width: 16px; height: 3px;
+  width: 0;
+  height: 3px;
   border-radius: 2px;
+  background: transparent;
+  transition: width 0.12s var(--ease-out);
+}
+
+.taskbar-icon.active::after {
   background: var(--accent);
+  width: 16px;
+  height: 4px;
+}
+
+.taskbar-icon.running:not(.active)::after {
+  background: #808080;
+  width: 8px;
+  height: 4px;
+}
+
+.wlogo-logo {
+  display: flex;
+}
+
+.wlogo-light {
+  position: absolute;
+  content: '';
+  height: 30px;
+  width: 30px;
+  background: linear-gradient(135deg,
+      #ffffff 20%,
+      /* 这里用纯白 */
+      transparent 80%);
+  mix-blend-mode: overlay;
+  /* 关键：叠加模式，高亮底色 */
+  opacity: 0.8;
+  -webkit-mask-image: url(/images/@WLOGO_96x96.png);
+  -webkit-mask-size: cover;
+  mask-image: url(/images/@WLOGO_96x96.png);
+  mask-size: cover;
+  transition: background-position 0.12s var(--ease-out);
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+
+.taskbar-icon:active .wlogo-light {
+  background-position: -30px -30px;
+  transition: background-position 0.12s ease-in;
 }
 
 .taskbar-right {
@@ -500,7 +622,8 @@ html, body {
 
 /* ===== Theme Toggle ===== */
 .theme-toggle {
-  width: 30px; height: 30px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   border: 1px solid transparent;
   background: transparent;
@@ -515,7 +638,10 @@ html, body {
   padding: 0;
   line-height: 1;
 }
-.theme-toggle:hover { background: var(--hover-bg); }
+
+.theme-toggle:hover {
+  background: var(--hover-bg);
+}
 
 /* ===== Inline Link ===== */
 .link-subtle {
@@ -524,6 +650,7 @@ html, body {
   font-weight: 500;
   transition: color 0.15s;
 }
+
 .link-subtle:hover {
   color: var(--accent-hover);
   text-decoration: underline;
@@ -536,6 +663,7 @@ html, body {
   gap: 16px;
   margin-top: 20px;
 }
+
 .iframe-box {
   border: 1px solid var(--border-card);
   border-radius: var(--radius-md);
@@ -543,6 +671,7 @@ html, body {
   background: var(--surface-iframe);
   box-shadow: var(--shadow-sm);
 }
+
 .iframe-box iframe {
   width: 100%;
   height: 380px;
@@ -558,7 +687,11 @@ html, body {
   gap: 8px;
   margin-top: 16px;
 }
-.social-list li { text-align: center; }
+
+.social-list li {
+  text-align: center;
+}
+
 .social-list a {
   color: var(--accent);
   text-decoration: none;
@@ -569,7 +702,10 @@ html, body {
   border-radius: var(--radius-sm);
   transition: all 0.15s;
 }
-.social-list a:hover { background: var(--accent-light); }
+
+.social-list a:hover {
+  background: var(--accent-light);
+}
 
 /* ===== Video Container ===== */
 .video-container {
@@ -578,6 +714,7 @@ html, body {
   overflow: hidden;
   box-shadow: var(--shadow-lg);
 }
+
 .video-container video {
   width: 100%;
   display: block;
@@ -600,6 +737,7 @@ html, body {
   box-shadow: var(--shadow-sm);
   transition: all 0.15s;
 }
+
 .tool-card:hover {
   background: var(--surface-card);
   box-shadow: var(--shadow-md);
@@ -658,6 +796,7 @@ html, body {
   resize: vertical;
   box-sizing: border-box;
 }
+
 .tool-card textarea:focus {
   outline: none;
   border-color: var(--accent);
@@ -695,14 +834,17 @@ html, body {
   cursor: pointer;
   transition: all 0.12s;
 }
+
 .tool-card .btn-sm:hover {
   background: var(--hover-bg-strong);
 }
+
 .tool-card .btn-sm.accent {
   background: var(--accent);
   color: #fff;
   border-color: transparent;
 }
+
 .tool-card .btn-sm.accent:hover {
   background: var(--accent-hover);
 }
@@ -712,8 +854,14 @@ html, body {
   gap: 8px;
   align-items: center;
 }
-.tool-card .inline-row > * { flex: 1; }
-.tool-card .inline-row > .fixed { flex: 0 0 auto; }
+
+.tool-card .inline-row>* {
+  flex: 1;
+}
+
+.tool-card .inline-row>.fixed {
+  flex: 0 0 auto;
+}
 
 .chmod-grid {
   display: grid;
@@ -722,34 +870,94 @@ html, body {
   align-items: center;
   font-size: 12px;
 }
-.chmod-grid .head { font-weight:600; font-size:10px; color:var(--text-tertiary); text-transform:uppercase; }
+
+.chmod-grid .head {
+  font-weight: 600;
+  font-size: 10px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
 
 /* ===== Utility Classes ===== */
-.text-center { text-align: center; }
-.window-narrow { max-width: 460px; }
-.window-wide { max-width: 960px; }
-.window-body-tight { padding: 12px; }
-.flex-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.mt-16 { margin-top: 16px; }
-.mt-20 { margin-top: 20px; }
-.mx-12 { margin: 12px 0; }
-.mx-16 { margin: 16px 0; }
-.mx-20 { margin: 20px 0; }
+.text-center {
+  text-align: center;
+}
+
+.window-narrow {
+  max-width: 460px;
+}
+
+.window-wide {
+  max-width: 960px;
+}
+
+.window-body-tight {
+  padding: 12px;
+}
+
+.flex-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mx-12 {
+  margin: 12px 0;
+}
+
+.mx-16 {
+  margin: 16px 0;
+}
+
+.mx-20 {
+  margin: 20px 0;
+}
 
 /* ===== Responsive ===== */
 @media (max-width: 640px) {
-  .window-body { padding: 18px; }
-  .window-body h1 { font-size: 22px; }
-  .iframe-row { grid-template-columns: 1fr; }
-  .card-grid { grid-template-columns: 1fr 1fr; }
-  .taskbar-icon { width: 34px; height: 34px; }
-  .desktop-icon { width: 68px; padding: 8px 4px; }
-  .desktop-icon .d-icon { font-size: 28px; }
+  .window-body {
+    padding: 18px;
+  }
+
+  .window-body h1 {
+    font-size: 22px;
+  }
+
+  .iframe-row {
+    grid-template-columns: 1fr;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .taskbar-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .desktop-icon {
+    width: 68px;
+    padding: 8px 4px;
+  }
+
+  .desktop-icon .d-icon {
+    font-size: 28px;
+  }
 }
 
 
 .github-icon {
-  height: 24px; 
+  height: 24px;
   filter: invert(1);
   transition: filter 0.5s;
 }
