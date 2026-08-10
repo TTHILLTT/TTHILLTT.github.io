@@ -805,7 +805,6 @@
             if ($taskbarIcon) {
                 const windowID = $taskbarIcon.dataset.window;
                 const $window = document.getElementById(windowID);
-                $window.classList.add("animation");
                 switch ($window.dataset.status) {
                     case 'closed': {
                         openWindow($window)
@@ -814,7 +813,7 @@
                         if (window.$topWindow === $window) {
                             minimizeWindow($window)
                         } else {
-
+                            setWindowTop($window)
                         }
                     } break;
                     case 'minimized': {
@@ -856,6 +855,7 @@
                 } break;
                 default: {
                     $window.classList.remove("hidden");
+                    $window.classList.add("animation");
                     $taskbarIcon.classList.add("active");
                     setWindowTop($window)
 
