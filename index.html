@@ -427,6 +427,8 @@
             getTaskbarIcon($window).classList.add("active");
         }
 
+        const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+
         document.addEventListener("pointerdown", (event) => {
             const $titlebar = event.target.closest(".titlebar");
             if ($titlebar) {
@@ -441,8 +443,22 @@
 
         document.addEventListener("pointermove", (event) => {
             if (window.$dragingWindow) {
-                adjustStyle(window.$dragingWindow, 'left', event.movementX);
-                adjustStyle(window.$dragingWindow, 'top', event.movementY);
+                // 1. 获取计算后的样式（兼容外部样式表）
+                const computed = getComputedStyle(window.$dragingWindow);
+                // 2. 获取当前值（字符串，如 "16px", "2rem", "auto"）
+                const currentValueX = computed.getPropertyValue('left');
+                const currentValueY = computed.getPropertyValue('top');
+
+                // 3. 提取数值部分（如果是 "auto" 或 "none" 等非数值，则默认为 0）
+                const numericX = parseFloat(currentValueX) || 0;
+                const numericY = parseFloat(currentValueY) || 0;
+
+                // 5. 计算新值并赋值（注意：用 style.setProperty 兼容 kebab-case）
+                const newValueX = clamp((numericX + event.movementX), 0, window.innerWidth - 50) + 'px';
+                const newValueY = clamp((numericY + event.movementY), 0, window.innerHeight - 100) + 'px';
+
+                window.$dragingWindow.style.setProperty('left', newValueX);
+                window.$dragingWindow.style.setProperty('top', newValueY);
             }
         })
 
