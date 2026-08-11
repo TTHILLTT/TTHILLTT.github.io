@@ -1131,7 +1131,20 @@
         }
 
         function flyHide($window, $target) {
+            // 动画目标改为 .window-inner 自身：
+            // 若对 .window 做 transform，会让带 backdrop-filter 的子元素
+            // 在动画期间无法取样背后的桌面，导致背景模糊失效
+            const $flyEl = $window.querySelector('.window-inner') || $window;
+            const animatingInner = $flyEl !== $window;
+
+            // 每次飞行动画都递增该窗口的序号；onfinish 只在仍是最新动画时收尾，
+            // 避免快速连续点击任务栏图标时，旧动画迟到的收尾把新状态覆盖（窗口卡住弹不出）
+            const mySeq = ($window._flySeq = ($window._flySeq || 0) + 1);
+
             $window.getAnimations().filter(anim => anim.playState === 'running').forEach(anim => {
+                anim.finish();
+            });
+            $flyEl.getAnimations().filter(anim => anim.playState === 'running').forEach(anim => {
                 anim.finish();
             });
 
@@ -1145,24 +1158,39 @@
             const deltaX = (endRect.left + endRect.width / 2) - (startRect.left + startRect.width / 2);
             const deltaY = (endRect.top + endRect.height / 2) - (startRect.top + startRect.height / 2);
 
-            $window.classList.add("hidden")
             $window.classList.remove("animation")
 
+            // 兜底路径（找不到 .window-inner）保持原行为：动画开始前先隐藏窗口
+            if (!animatingInner) $window.classList.add("hidden")
+
             // 5. 执行动画（缩放 + 位移 + 淡出）
-            $window.animate([
+            $flyEl.animate([
                 { transform: 'translate(0, 0) scale(1)', opacity: 1 },
                 { transform: `translate(${deltaX}px, ${deltaY}px) scale(0)`, opacity: 1 }
             ], {
                 duration: 200,
                 easing: 'cubic-bezier(0.5, 0, 1, 0.5)', // 缓动效果
             }).onfinish = () => {
+                if (mySeq !== $window._flySeq) return; // 已有更新的动画，放弃本次收尾
+                if (animatingInner) $window.classList.add("hidden");
                 $window.style.pointerEvents = "";
-                $window.style.transform = "";
+                $flyEl.style.transform = "";
+                $flyEl.style.opacity = "";
             }; // 动画结束移除幻影
         }
 
         function flyShow($window, $from, callback) {
+            // 与 flyHide 相同：动画作用于 .window-inner，
+            // 避免 .window 的 transform 使 backdrop-filter 在动画期间失效
+            const $flyEl = $window.querySelector('.window-inner') || $window;
+
+            // 与 flyHide 共用同一个序号，保证"后来者"总是覆盖"先到者"的收尾
+            const mySeq = ($window._flySeq = ($window._flySeq || 0) + 1);
+
             $window.getAnimations().filter(anim => anim.playState === 'running').forEach(anim => {
+                anim.finish();
+            });
+            $flyEl.getAnimations().filter(anim => anim.playState === 'running').forEach(anim => {
                 anim.finish();
             });
 
@@ -1180,15 +1208,17 @@
             $window.classList.remove("animation")
 
             // 5. 执行动画（缩放 + 位移 + 淡出）
-            $window.animate([
+            $flyEl.animate([
                 { transform: `translate(${-deltaX}px, ${-deltaY}px) scale(0)` },
                 { transform: 'translate(0, 0) scale(1)' },
             ], {
                 duration: 200,
                 easing: 'cubic-bezier(0, 0.5, 0.5, 1)', // 缓动效果
             }).onfinish = () => {
+                if (mySeq !== $window._flySeq) return; // 已有更新的动画，放弃本次收尾
                 $window.style.pointerEvents = "";
-                $window.style.transform = "";
+                $flyEl.style.transform = "";
+                $flyEl.style.opacity = "";
                 if (callback) {
                     callback($window, $from)
                 }
