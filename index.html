@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="window hidden" id="contact" style="width: 300px">
+        <div class="window hidden" id="contact" style="width: 300px;">
             <div class="window-inner">
                 <div class="titlebar">
                     <div class="titlebar-left">
@@ -101,14 +101,14 @@
                 </div>
 
                 <div class="window-body window-body-tight">
-                    <div class="video-container">
-                        <video id="nggyu-video" src="../images/NGGYU.mp4" controls></video>
+                    <div class="video-container" style="height: 100%">
+                        <video id="nggyu-video" src="../images/NGGYU.mp4" style="height: 100%" controls></video>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="window window-wide hidden" id="tools">
+        <div class="window window-wide hidden" id="tools" style="height: 72vh">
             <div class="window-inner">
                 <div class="titlebar">
                     <div class="titlebar-left">
@@ -121,7 +121,7 @@
                         <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
                     </div>
                 </div>
-                <div class="window-body" style="max-height:72vh; overflow-y:auto; padding:20px 24px;">
+                <div class="window-body" style="padding:20px 24px;">
 
                     <div class="tools-toolbar">
                         <input type="search" id="toolSearch" class="tools-search" placeholder="🔍 搜索工具名称或功能…" autocomplete="off" aria-label="搜索工具">
@@ -606,6 +606,8 @@
         </a>
     </div>
 
+    <div id="white-screen"></div>
+
     <footer class="taskbar" id="taskbar">
         <div class="taskbar-center">
             <a class="taskbar-icon wlogo" title="Wlogo">
@@ -615,7 +617,7 @@
             </a>
             <a class="taskbar-icon" title="Explorer" data-window="explorer"><img src="./images/ICON5325_1.ico" alt="explorer" style="height: 24px;"></a>
             <a class="taskbar-icon active" title="Home" data-window="home"><img src="./images/ICON51380_1.ico" alt="home" style="height: 24px;"></a>
-            <a class="taskbar-icon" href="https://github.com/TTHILLTT" title="GitHub" target="_blank" rel="noopener"><img src="./images/GitHub.svg" class="github-icon" alt="GitHub"></a>
+            <a class="taskbar-icon" id="github-button" title="GitHub" target="_blank" rel="noopener"><img src="./images/GitHub.svg" class="github-icon" alt="GitHub"></a>
             <a class="taskbar-icon" title="Contact" data-window="contact"><img src="./images/FeedbackHubAppList.targetsize-96_altform-unplated.png" alt="Contact" style="height: 24px;"></a>
             <a class="taskbar-icon" title="NGGYU" data-window="nggyu"><img src="./images/MediaPlayerAppList.targetsize-256_altform-unplated.png" alt="NGGYU" style="height: 24px;"></a>
             <a class="taskbar-icon" title="Tools" data-window="tools"><img src="./images/ICON1306_1.ico" alt="tools" style="height: 24px;"></a>
@@ -742,32 +744,81 @@
             if (!$windowInner && $window) {
                 window.$scalingWindow = $window
                 window.scalingEdge = getScalingEdge(event, $window)
+                event.preventDefault()
             }
         })
 
         window.$scalingWindow = null;
         window.scalingEdge = []
 
+        function moveWindow($window, x, y) {
+            const [numericX, numericY] = getWindowDim($window)
+
+            // 5. 计算新值并赋值（注意：用 style.setProperty 兼容 kebab-case）
+            const newValueX = clamp((numericX + x), -$window.offsetWidth + 200, window.innerWidth - 50);
+            const newValueY = clamp((numericY + y), 0, window.innerHeight - 100);
+
+            $window.style.setProperty('left', newValueX + 'px');
+            $window.style.setProperty('top', newValueY + 'px');
+
+            if (newValueX != numericX + x || newValueY != numericY + y) {
+                return false;
+            }
+            return true;
+        }
+
+        function getWindowDim($window) {
+            // 1. 获取计算后的样式（兼容外部样式表）
+            const computed = getComputedStyle($window);
+            // 2. 获取当前值（字符串，如 "16px", "2rem", "auto"）
+            const currentValueX = computed.getPropertyValue('left');
+            const currentValueY = computed.getPropertyValue('top');
+
+            // 3. 提取数值部分（如果是 "auto" 或 "none" 等非数值，则默认为 0）
+            const numericX = parseFloat(currentValueX) || 0;
+            const numericY = parseFloat(currentValueY) || 0;
+
+            return [numericX, numericY]
+        }
+
         document.addEventListener("pointermove", (event) => {
             if (window.$dragingWindow) {
-                // 1. 获取计算后的样式（兼容外部样式表）
-                const computed = getComputedStyle(window.$dragingWindow);
-                // 2. 获取当前值（字符串，如 "16px", "2rem", "auto"）
-                const currentValueX = computed.getPropertyValue('left');
-                const currentValueY = computed.getPropertyValue('top');
-
-                // 3. 提取数值部分（如果是 "auto" 或 "none" 等非数值，则默认为 0）
-                const numericX = parseFloat(currentValueX) || 0;
-                const numericY = parseFloat(currentValueY) || 0;
-
-                // 5. 计算新值并赋值（注意：用 style.setProperty 兼容 kebab-case）
-                const newValueX = clamp((numericX + event.movementX), 0, window.innerWidth - 50) + 'px';
-                const newValueY = clamp((numericY + event.movementY), 0, window.innerHeight - 100) + 'px';
-
-                window.$dragingWindow.style.setProperty('left', newValueX);
-                window.$dragingWindow.style.setProperty('top', newValueY);
+                moveWindow(window.$dragingWindow, event.movementX, event.movementY);
             }
 
+            if (window.$scalingWindow) {
+                if (window.scalingEdge.includes('right')) {
+                    let newWidth = Math.max(300, $scalingWindow.offsetWidth + event.movementX)
+                    const windowX = getWindowDim($scalingWindow)[0];
+                    if (windowX < 0) {
+                        newWidth = Math.max(-windowX + 200, newWidth)
+                    }
+                    $scalingWindow.style.width = newWidth + 'px'
+                }
+                if (window.scalingEdge.includes('bottom')) {
+                    $scalingWindow.style.height = Math.max(200, $scalingWindow.offsetHeight + event.movementY) + 'px'
+                }
+                if (window.scalingEdge.includes('left')) {
+                    const newWidth = $scalingWindow.offsetWidth - event.movementX
+                    if (newWidth > 300) {
+                        if (moveWindow($scalingWindow, event.movementX, 0)) {
+                            $scalingWindow.style.width = newWidth + 'px'
+                        }
+                    }
+                }
+                if (window.scalingEdge.includes('top')) {
+                    const newHeight = $scalingWindow.offsetHeight - event.movementY
+                    if (newHeight > 200) {
+                        if (moveWindow($scalingWindow, 0, event.movementY)) {
+                            $scalingWindow.style.height = newHeight + 'px'
+                        }
+                    }
+                }
+            }
+
+            for (const $window of document.getElementsByClassName('window')) {
+                $window.style.cursor = "auto"
+            }
             const $window = event.target.closest(".window");
             const $windowInner = event.target.closest(".window-inner");
             if (!$windowInner && $window) {
@@ -786,6 +837,7 @@
 
         document.addEventListener("pointerup", (event) => {
             window.$dragingWindow = null;
+            window.$scalingWindow = null;
         })
 
         document.addEventListener("click", (event) => {
@@ -804,21 +856,23 @@
             const $taskbarIcon = event.target.closest(".taskbar-icon");
             if ($taskbarIcon) {
                 const windowID = $taskbarIcon.dataset.window;
-                const $window = document.getElementById(windowID);
-                switch ($window.dataset.status) {
-                    case 'closed': {
-                        openWindow($window)
-                    } break;
-                    case 'open': {
-                        if (window.$topWindow === $window) {
-                            minimizeWindow($window)
-                        } else {
-                            setWindowTop($window)
-                        }
-                    } break;
-                    case 'minimized': {
-                        openWindow($window)
-                    } break;
+                if (windowID) {
+                    const $window = document.getElementById(windowID);
+                    switch ($window.dataset.status) {
+                        case 'closed': {
+                            openWindow($window)
+                        } break;
+                        case 'open': {
+                            if (window.$topWindow === $window) {
+                                minimizeWindow($window)
+                            } else {
+                                setWindowTop($window)
+                            }
+                        } break;
+                        case 'minimized': {
+                            openWindow($window)
+                        } break;
+                    }
                 }
             }
         })
@@ -912,7 +966,7 @@
             }; // 动画结束移除幻影
         }
 
-        function flyShow($window, $from) {
+        function flyShow($window, $from, callback) {
             $window.getAnimations().filter(anim => anim.playState === 'running').forEach(anim => {
                 anim.finish();
             });
@@ -940,8 +994,23 @@
             }).onfinish = () => {
                 $window.style.pointerEvents = "";
                 $window.style.transform = "";
+                if (callback) {
+                    callback($window, $from)
+                }
             }; // 动画结束移除幻影
         }
+
+        document.getElementById("github-button").addEventListener('click', (event) => {
+            const $whiteScreen = document.getElementById("white-screen")
+            $whiteScreen.style.display = "unset"
+            $whiteScreen.style.zIndex = currentZIndex + 10
+            flyShow($whiteScreen, document.getElementById("github-button"), () => {
+                window.open("https://github.com/TTHILLTT", target = '_blank')
+                setTimeout(() => {
+                    $whiteScreen.style.display = ""
+                }, 50);
+            })
+        })
 
         const $homeWindow = document.getElementById("home")
         openWindow($homeWindow)

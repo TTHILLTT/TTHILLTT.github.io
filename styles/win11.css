@@ -238,7 +238,6 @@ body {
 
 /* ===== Window Component ===== */
 .window {
-  max-width: 900px;
   width: 100%;
   position: fixed;
   pointer-events: auto;
@@ -246,7 +245,6 @@ body {
   top: 0;
   padding: 10px;
   overflow: visible;
-  cursor: ew-resize;
 }
 
 .window-inner {
@@ -259,6 +257,7 @@ body {
   border: 1px solid var(--border-window);
   overflow: hidden;
   cursor: auto;
+  height: 100%;
 }
 
 .window-inner::before {
@@ -387,6 +386,8 @@ body {
 /* ===== Window Body ===== */
 .window-body {
   padding: 28px;
+  height: calc(100% - 32px);
+  overflow: auto;
 }
 
 .window-body h1 {
@@ -1024,11 +1025,11 @@ body {
 }
 
 .window-narrow {
-  max-width: 460px;
+  width: 460px;
 }
 
 .window-wide {
-  max-width: 960px;
+  width: 960px;
 }
 
 .window-body-tight {
@@ -1099,7 +1100,7 @@ body {
 .github-icon {
   height: 24px;
   filter: invert(1);
-  transition: filter 0.5s;
+  transition: all 0.12s var(--ease-out), filter 0.5s;
 }
 
 .window-content {
@@ -1108,6 +1109,7 @@ body {
 
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -1116,4 +1118,24 @@ body {
   border-radius: 5px;
   border: 2px solid transparent;
   background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent
+}
+
+#white-screen {
+  background: #FFFFFF;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  position: fixed;
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  #white-screen {
+    background: #0D1117;
+  }
 }
