@@ -193,21 +193,66 @@
                                 </div>
                                 <div class="file-row">
                                     <div class="file-name-cell">
-                                        📄
+                                        <div class="file-name-icon">📄</div>
                                         <span>1.txt</span>
                                     </div>
                                     <div>2026/8/11 13:40</div>
                                     <div>文本文档</div>
                                     <div>0 KB</div>
                                 </div>
-                                <div class="file-row active">
+                                <div class="file-row">
                                     <div class="file-name-cell">
-                                        📄
+                                        <div class="file-name-icon">📄</div>
                                         <span>2.txt</span>
                                     </div>
                                     <div>2026/8/11 13:40</div>
                                     <div>文本文档</div>
                                     <div>0 KB</div>
+                                </div>
+                                <div class="file-row" data-window="home">
+                                    <div class="file-name-cell">
+                                        <div class="file-name-icon">📄</div>
+                                        <span>README.md</span>
+                                    </div>
+                                    <div>2026/8/11 13:40</div>
+                                    <div>Markdown 文件</div>
+                                    <div>1 KB</div>
+                                </div>
+                                <div class="file-row" data-window="contact">
+                                    <div class="file-name-cell">
+                                        <div class="file-name-icon">🌐</div>
+                                        <span>Contact.html</span>
+                                    </div>
+                                    <div>2026/8/11 13:40</div>
+                                    <div>Microsoft Edge HTML Document</div>
+                                    <div>1 KB</div>
+                                </div>
+                                <div class="file-row" data-window="github">
+                                    <div class="file-name-cell">
+                                        <div class="file-name-icon"><img src="/images/ICON163_1.ico"></div>
+                                        <span>github.lnk</span>
+                                    </div>
+                                    <div>2026/8/11 13:40</div>
+                                    <div>快捷方式</div>
+                                    <div>1 KB</div>
+                                </div>
+                                <div class="file-row" data-window="nggyu">
+                                    <div class="file-name-cell">
+                                        <div class="file-name-icon">🎞️</div>
+                                        <span>千万别点.mp4</span>
+                                    </div>
+                                    <div>2026/8/11 13:40</div>
+                                    <div>MP4 文件</div>
+                                    <div>33.7 MB</div>
+                                </div>
+                                <div class="file-row" data-window="tools">
+                                    <div class="file-name-cell">
+                                        <div class="file-name-icon"><img src="/images/ICON1306_1.ico"></div>
+                                        <span>工具箱.exe</span>
+                                    </div>
+                                    <div>2026/8/11 13:40</div>
+                                    <div>应用程序</div>
+                                    <div>45 KB</div>
                                 </div>
                             </div>
                         </div>
@@ -1100,6 +1145,29 @@
             if ($titlebar && !event.target.closest(".win-ctrl-btn")) {
                 toggleMaximize($titlebar.closest(".window"));
             }
+
+            const $fileRow = event.target.closest(".file-row");
+            if ($fileRow) {
+                const windowID = $fileRow.dataset.window;
+                if (windowID) {
+                    if (windowID === 'github') {
+                        openGithub()
+                    } else {
+                        const $window = document.getElementById(windowID);
+                        switch ($window.dataset.status) {
+                            case 'closed': {
+                                openWindow($window)
+                            } break;
+                            case 'open': {
+                                setWindowTop($window)
+                            } break;
+                            case 'minimized': {
+                                openWindow($window)
+                            } break;
+                        }
+                    }
+                }
+            }
         })
 
         document.addEventListener("click", (event) => {
@@ -1444,7 +1512,9 @@
             }; // 动画结束移除幻影
         }
 
-        document.getElementById("github-button").addEventListener('click', (event) => {
+        document.getElementById("github-button").addEventListener('click', openGithub)
+
+        function openGithub() {
             const $whiteScreen = document.getElementById("white-screen")
             $whiteScreen.style.display = "unset"
             $whiteScreen.style.zIndex = currentZIndex + 10
@@ -1454,7 +1524,7 @@
                     $whiteScreen.style.display = ""
                 }, 50);
             })
-        })
+        }
 
         const $homeWindow = document.getElementById("home")
         openWindow($homeWindow)

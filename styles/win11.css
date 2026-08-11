@@ -184,7 +184,7 @@
       border-bottom: 1px solid #e2e8f0;
     }
 
-    .file-row.active {
+    .file-row:hover {
       background: #bfdbfe;
     }
 
@@ -214,6 +214,10 @@
 
     .view-btn:hover {
       background: #e2e8f0;
+    }
+
+    .tab-close:hover {
+      background: #cbd5e1;
     }
   }
 
@@ -367,16 +371,19 @@ body {
   pointer-events: none;
 }
 
-.window.animation {
+.window.animation .window-inner {
   animation: windowOpen 0.35s var(--ease-out);
 }
 
 .window.hidden {
-  opacity: 0;
   pointer-events: none;
+
+  .window-inner {
+    opacity: 0;
+  }
 }
 
-.window.hidden.animation {
+.window.hidden.animation .window-inner {
   animation: windowClose 0.35s var(--ease-out);
 }
 
@@ -1317,11 +1324,11 @@ body {
   }
 
   .tab-close:hover {
-    background: #cbd5e1;
+    background: #ffffff20;
   }
 
   .win-ctrl-btn.tab-close:hover {
-    background: #cbd5e1;
+    background: #ffffff20;
   }
 
   .title-empty {
@@ -1508,15 +1515,30 @@ body {
     align-items: center;
   }
 
-  .file-row.active {
+  .file-row>div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .file-row:hover {
     background: #FFFFFF30;
-    transition: background-color 0.5s;
   }
 
   .file-name-cell {
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+
+  .file-name-icon {
+    width: 20px;
+    display: flex;
+    justify-content: center;
+
+    img {
+      height: 14px;
+    }
   }
 
   /* 底部状态栏 */
