@@ -282,6 +282,16 @@ body {
   animation: windowClose 0.35s var(--ease-out);
 }
 
+.window.maximized {
+  padding: 0;
+}
+
+.window.maximized .window-inner {
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+}
+
 @keyframes windowOpen {
   from {
     opacity: 0;

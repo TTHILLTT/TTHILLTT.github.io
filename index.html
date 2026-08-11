@@ -730,10 +730,23 @@
             return []
         }
 
+        window.downPos = null
+
         document.addEventListener("pointerdown", (event) => {
             const $titlebar = event.target.closest(".titlebar");
             if ($titlebar) {
-                window.$dragingWindow = $titlebar.closest(".window");
+                const $window = $titlebar.closest(".window");
+                window.$dragingWindow = $window;
+                window.$dragMoved = false;
+                window.dragRestored = false;
+                if (isMaximized($window)) {
+                    window.dragingMaximized = true;
+                    const rect = $window.getBoundingClientRect();
+                    window.$grabOffsetX = event.clientX - rect.left;
+                    window.$grabOffsetY = event.clientY - rect.top;
+                } else {
+                    window.dragingMaximized = false;
+                }
                 event.preventDefault();
             }
             const $window = event.target.closest(".window");
@@ -741,11 +754,12 @@
                 setWindowTop($window)
             }
             const $windowInner = event.target.closest(".window-inner");
-            if (!$windowInner && $window) {
+            if (!$windowInner && $window && !isMaximized($window)) {
                 window.$scalingWindow = $window
                 window.scalingEdge = getScalingEdge(event, $window)
                 event.preventDefault()
             }
+            window.downPos = [event.clientX, event.clientY]
         })
 
         window.$scalingWindow = null;
@@ -783,7 +797,25 @@
 
         document.addEventListener("pointermove", (event) => {
             if (window.$dragingWindow) {
-                moveWindow(window.$dragingWindow, event.movementX, event.movementY);
+                const moved = window.downPos && Math.abs(event.clientX - downPos[0]) + Math.abs(event.clientY - downPos[1]) > 5;
+                if (moved) {
+                    window.$dragMoved = true;
+                }
+                if (window.dragingMaximized) {
+                    if (moved && !window.dragRestored) {
+                        restoreWindow(window.$dragingWindow, {
+                            instant: true,
+                            left: Math.max(event.clientX - window.$grabOffsetX, event.clientX - (parseFloat($dragingWindow._restoreState.width) || 0) + 200),
+                            top: event.clientY - window.$grabOffsetY
+                        });
+                        window.dragRestored = true;
+                        window.dragingMaximized = false;
+                    } else if (window.dragRestored) {
+                        moveWindow(window.$dragingWindow, event.movementX, event.movementY);
+                    }
+                } else {
+                    moveWindow(window.$dragingWindow, event.movementX, event.movementY);
+                }
             }
 
             if (window.$scalingWindow) {
@@ -821,7 +853,7 @@
             }
             const $window = event.target.closest(".window");
             const $windowInner = event.target.closest(".window-inner");
-            if (!$windowInner && $window) {
+            if (!$windowInner && $window && !isMaximized($window)) {
                 $window.style.cursor = {
                     'left': 'w-resize',
                     'right': 'e-resize',
@@ -838,6 +870,17 @@
         document.addEventListener("pointerup", (event) => {
             window.$dragingWindow = null;
             window.$scalingWindow = null;
+            window.$dragMoved = false;
+            window.dragingMaximized = false;
+            window.dragRestored = false;
+        })
+
+        document.addEventListener("dblclick", (event) => {
+            if (window.$dragMoved) return;
+            const $titlebar = event.target.closest(".titlebar");
+            if ($titlebar && !event.target.closest(".win-ctrl-btn")) {
+                toggleMaximize($titlebar.closest(".window"));
+            }
         })
 
         document.addEventListener("click", (event) => {
@@ -851,6 +894,12 @@
             if ($minimize) {
                 const $window = $minimize.closest(".window");
                 minimizeWindow($window)
+            }
+
+            const $maximize = event.target.closest(".win-ctrl-btn.maximize");
+            if ($maximize) {
+                const $window = $maximize.closest(".window");
+                toggleMaximize($window)
             }
 
             const $taskbarIcon = event.target.closest(".taskbar-icon");
@@ -935,6 +984,152 @@
             $window.dataset.status = "minimized"
         }
 
+        function getWorkArea() {
+            const taskbar = document.getElementById("taskbar");
+            return {
+                width: window.innerWidth,
+                height: window.innerHeight - (taskbar ? taskbar.offsetHeight : 50)
+            };
+        }
+
+        function isMaximized($window) {
+            return $window.classList.contains("maximized");
+        }
+
+        function finishRunningAnimations($window) {
+            $window.getAnimations().filter(anim => anim.playState === 'running').forEach(anim => {
+                anim.finish();
+            });
+            const $inner = $window.querySelector(".window-inner");
+            if ($inner) {
+                $inner.getAnimations().filter(anim => anim.playState === 'running').forEach(anim => {
+                    anim.finish();
+                });
+            }
+        }
+
+        function setMaximizeButton($window, maximized) {
+            const $btn = $window.querySelector(".win-ctrl-btn.maximize");
+            if (!$btn) return;
+            if (maximized) {
+                $btn.innerHTML = "&#x2750;";
+                $btn.setAttribute("aria-label", "Restore");
+            } else {
+                $btn.innerHTML = "&#x25A1;";
+                $btn.setAttribute("aria-label", "Maximize");
+            }
+        }
+
+        function maximizeWindow($window) {
+            if (isMaximized($window)) return;
+            finishRunningAnimations($window);
+
+            const computed = getComputedStyle($window);
+            $window._restoreState = {
+                left: parseFloat(computed.left) || 0,
+                top: parseFloat(computed.top) || 0,
+                width: computed.width,
+                height: computed.height
+            };
+
+            const startRect = $window.getBoundingClientRect();
+            const area = getWorkArea();
+
+            $window.style.left = "0px";
+            $window.style.top = "0px";
+            $window.style.width = area.width + "px";
+            $window.style.height = area.height + "px";
+            $window.classList.add("maximized");
+            setMaximizeButton($window, true);
+
+            const endRect = $window.getBoundingClientRect();
+            const sx = startRect.width / endRect.width;
+            const sy = startRect.height / endRect.height;
+            const tx = startRect.left - endRect.left;
+            const ty = startRect.top - endRect.top;
+
+            const $inner = $window.querySelector(".window-inner");
+            const radius = getComputedStyle($inner).borderRadius;
+
+            $window.style.transformOrigin = "0 0";
+            const anim = $window.animate([
+                { transform: `translate(${tx}px, ${ty}px) scale(${sx}, ${sy})` },
+                { transform: "translate(0px, 0px) scale(1, 1)" }
+            ], { duration: 250, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" });
+            anim.onfinish = () => {
+                $window.style.transformOrigin = "";
+            };
+
+            $inner.animate([
+                { borderRadius: radius },
+                { borderRadius: "0px" }
+            ], { duration: 250, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" });
+        }
+
+        function restoreWindow($window, options = {}) {
+            if (!isMaximized($window)) return;
+            const state = $window._restoreState;
+            if (!state) return;
+
+            const targetLeft = options.left !== undefined ? options.left : state.left;
+            const targetTop = options.top !== undefined ? options.top : state.top;
+
+            if (options.instant) {
+                finishRunningAnimations($window);
+                $window.style.left = targetLeft + "px";
+                $window.style.top = targetTop + "px";
+                $window.style.width = state.width;
+                $window.style.height = state.height;
+                $window.classList.remove("maximized");
+                setMaximizeButton($window, false);
+                $window._restoreState = null;
+                return;
+            }
+
+            finishRunningAnimations($window);
+
+            const startRect = $window.getBoundingClientRect();
+
+            $window.style.left = targetLeft + "px";
+            $window.style.top = targetTop + "px";
+            $window.style.width = state.width;
+            $window.style.height = state.height;
+            $window.classList.remove("maximized");
+            setMaximizeButton($window, false);
+
+            const endRect = $window.getBoundingClientRect();
+            const sx = endRect.width / startRect.width;
+            const sy = endRect.height / startRect.height;
+            const tx = endRect.left - startRect.left;
+            const ty = endRect.top - startRect.top;
+
+            const $inner = $window.querySelector(".window-inner");
+            const radius = getComputedStyle($inner).borderRadius;
+
+            $window.style.transformOrigin = "0 0";
+            const anim = $window.animate([
+                { transform: `translate(${-tx}px, ${-ty}px) scale(${1 / sx}, ${1 / sy})` },
+                { transform: "translate(0px, 0px) scale(1, 1)" },
+            ], { duration: 250, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" });
+            anim.onfinish = () => {
+                $window.style.transformOrigin = "";
+                $window._restoreState = null;
+            };
+
+            $inner.animate([
+                { borderRadius: "0px" },
+                { borderRadius: radius }
+            ], { duration: 250, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" });
+        }
+
+        function toggleMaximize($window) {
+            if (isMaximized($window)) {
+                restoreWindow($window);
+            } else {
+                maximizeWindow($window);
+            }
+        }
+
         function flyHide($window, $target) {
             $window.getAnimations().filter(anim => anim.playState === 'running').forEach(anim => {
                 anim.finish();
@@ -1017,6 +1212,18 @@
         const rect = $homeWindow.getBoundingClientRect()
         $homeWindow.style.left = `${(window.innerWidth - rect.width) / 2}px`
         $homeWindow.style.top = `${(window.innerHeight - rect.height) / 2}px`
+
+        window.addEventListener("resize", () => {
+            for (const $window of document.getElementsByClassName("window")) {
+                if (isMaximized($window)) {
+                    const area = getWorkArea();
+                    $window.style.left = "0px";
+                    $window.style.top = "0px";
+                    $window.style.width = area.width + "px";
+                    $window.style.height = area.height + "px";
+                }
+            }
+        })
     </script>
 
     <script src="./scripts/tools.js"></script>
