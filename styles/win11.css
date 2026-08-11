@@ -180,6 +180,7 @@
     }
 
     .table-header {
+      background-color: #FFFFFF;
       color: #475569;
       border-bottom: 1px solid #e2e8f0;
     }
@@ -218,6 +219,10 @@
 
     .tab-close:hover {
       background: #cbd5e1;
+    }
+
+    .file-view {
+      color: #6D6D6D;
     }
   }
 
@@ -1495,6 +1500,9 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow: auto;
+    color: #DEDEDE;
+    transition: color 0.5s;
   }
 
   .table-header {
@@ -1504,7 +1512,10 @@ body {
     font-size: 14px;
     color: #A0A0A0;
     border-bottom: 1px solid #191919;
-    transition: border-color 0.5s;
+    position: sticky;
+    top: 0;
+    background-color: #191919;
+    transition: border-color 0.5s, background-color 0.5s;
   }
 
   .file-row {
@@ -1529,6 +1540,7 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    color: var(--text-primary)
   }
 
   .file-name-icon {
