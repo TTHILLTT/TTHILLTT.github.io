@@ -17,6 +17,222 @@
 
     <!-- Window -->
     <main class="content-overlay">
+        <div class="window hidden" id="explorer" style="width: 1000px; min-width: 800px;">
+            <div class="window-inner">
+                <div class="window-body">
+                    <div class="win-explorer">
+                        <!-- 标题栏 -->
+                        <div class="titlebar win-titlebar">
+                            <div class="title-gap" style="width: 12px;"></div>
+                            <div class="title-tab">
+                                <span class="titlebar-app-icon"><img src="images/ICON5325_1.ico" alt="aka" style="width: 16px; height: 16px;"></span>
+                                <span>文件资源管理器</span>
+                                <div class="tab-close win-ctrl-btn close">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M33.2 14.8a1.2 1.2 0 00-1.7 0L24 22.3l-7.5-7.5a1.2 1.2 0 00-1.7 1.7l7.5 7.5-7.5 7.5a1.2 1.2 0 101.7 1.7l7.5-7.5 7.5 7.5a1.2 1.2 0 101.7-1.7l-7.5-7.5 7.5-7.5a1.2 1.2 0 000-1.7z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="title-tab" style="background:transparent;width:44px;border:none">
+                                <svg viewBox="0 0 48 48">
+                                    <path d="M23.98 12.5a1.2 1.2 0 011.2 1.2v10.1h10.1a1.2 1.2 0 110 2.4h-10.1v10.1a1.2 1.2 0 11-2.4 0v-10.1h-10.1a1.2 1.2 0 110-2.4h10.1v-10.1a1.2 1.2 0 011.2-1.2z" />
+                                </svg>
+                            </div>
+                            <div class="title-empty"></div>
+                            <div class="win-controls">
+                                <div class="win-ctrl-btn minimize">&#x2014;</div>
+                                <div class="win-ctrl-btn maximize">&#x25A1;</div>
+                                <div class="win-ctrl-btn close">&#x2715;</div>
+                            </div>
+                        </div>
+
+                        <!-- 导航地址栏 -->
+                        <div class="nav-bar">
+                            <div class="nav-btn">
+                                <img src="/images/ic_fluent_arrow_left_48_regular.svg">
+                            </div>
+                            <div class="nav-btn">
+                                <img src="/images/ic_fluent_arrow_right_48_regular.svg">
+                            </div>
+                            <div class="nav-btn">
+                                <img src="/images/ic_fluent_arrow_up_48_regular.svg">
+                            </div>
+                            <div class="nav-btn">
+                                <img src="/images/ic_fluent_arrow_clockwise_48_regular.svg">
+                            </div>
+                            <div class="address-path">
+                                <img src="/images/ic_fluent_desktop_48_regular.svg" style="height: 18px;">
+                                <span>此电脑</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24">
+                                    <path d="M9.4 17.3a1 1 0 001.4 0l4.2-4.2a1 1 0 000-1.4l-4.2-4.2a1 1 0 10-1.4 1.4l3.5 3.5-3.5 3.5a1 1 0 000 1.4z" />
+                                </svg>
+                                <span>Windows-SSD (C:)</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24">
+                                    <path d="M9.4 17.3a1 1 0 001.4 0l4.2-4.2a1 1 0 000-1.4l-4.2-4.2a1 1 0 10-1.4 1.4l3.5 3.5-3.5 3.5a1 1 0 000 1.4z" />
+                                </svg>
+                                <span>example</span>
+                            </div>
+                            <div class="search-box">
+                                <input style="margin-left:6px;flex:1;border:none;background:none;outline:none;" placeholder="在 example 中搜索">
+                                <img src="/images/ic_fluent_search_48_regular.svg" style="height: 18px">
+                            </div>
+                        </div>
+
+                        <!-- 工具栏 -->
+                        <div class="toolbar">
+                            <div class="tool-item">
+                                <img src="/images/ic_fluent_add_circle_48_regular.svg" style="height: 18px;">
+                                <span>新建 ▾</span>
+                            </div>
+                            <div class="tool-divider"></div>
+                            <div class="tool-item">
+                                <img src="/images/ic_fluent_cut_48_regular.svg" style="height: 18px;">
+                            </div>
+                            <div class="tool-item">
+                                <img src="/images/ic_fluent_copy_48_regular.svg" style="height: 18px;">
+                            </div>
+                            <div class="tool-item">
+                                <img src="/images/ic_fluent_clipboard_paste_32_regular.svg" style="height: 18px;">
+                            </div>
+                            <div class="tool-item">
+                                <img src="/images/ic_fluent_rename_a_20_regular.svg" style="height: 18px;">
+                            </div>
+                            <div class="tool-item">
+                                <img src="/images/ic_fluent_share_48_regular.svg" style="height: 18px;">
+                            </div>
+                            <div class="tool-item">
+                                <img src="/images/ic_fluent_delete_48_regular.svg" style="height: 18px;">
+                            </div>
+                            <div class="tool-divider"></div>
+                            <div class="tool-item">
+                                <img src="/images/ic_fluent_arrow_sort_28_regular.svg" style="height: 18px;">
+                                <span>排序 ▾</span>
+                            </div>
+                            <div class="tool-item">
+                                <img src="/images/ic_fluent_list_28_regular.svg" style="height: 18px;">
+                                <span>查看 ▾</span>
+                            </div>
+                            <div class="tool-divider"></div>
+                            <div class="tool-item">
+                                <img src="/images/ic_fluent_more_horizontal_48_regular.svg" style="height: 18px;">
+                            </div>
+                            <div class="tool-right">
+                                <div class="tool-item">
+                                    <img src="/images/ic_fluent_panel_left_text_48_regular.svg" style="height: 18px; transform: rotateY(180deg);">
+                                    <span>详细信息</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 主体 -->
+                        <div class="main-container">
+                            <!-- 侧边栏 -->
+                            <div class="sidebar">
+                                <div class="sidebar-item">
+                                    <img src="/images/ICON51380_1.ico" style="height: 18px; transform: rotateY(180deg);">
+                                    <span>主文件夹</span>
+                                </div>
+                                <div class="sidebar-item">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M34.8 12H13.2C11.4 12 10 13.4 10 15.2v17.6c0 1.8 1.4 3.2 3.2 3.2h21.6c1.8 0 3.2-1.4 3.2-3.2V15.2c0-1.8-1.4-3.2-3.2-3.2zM12.4 16h23.2v16.8H12.4V16z M16 20a1.2 1.2 0 000 2.4h16a1.2 1.2 0 100-2.4H16z" />
+                                    </svg>
+                                    <span>图库</span>
+                                </div>
+                                <div class="sidebar-item">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M12.4 14a2.4 2.4 0 00-2.4 2.4v15.2a2.4 2.4 0 002.4 2.4h23.2a2.4 2.4 0 002.4-2.4V16.4a2.4 2.4 0 00-2.4-2.4H12.4zm0 2.4h23.2v15.2H12.4V16.4zM24 20a6 6 0 100 12 6 6 0 000-12zm0 2.4a3.6 3.6 0 110 7.2 3.6 3.6 0 010-7.2z" />
+                                    </svg>
+                                    <span>OneDrive</span>
+                                </div>
+                                <div style="height:12px;"></div>
+                                <div class="sidebar-item">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M12 14a2 2 0 00-2 2v18a2 2 0 002 2h24a2 2 0 002-2V16a2 2 0 00-2-2H12zm0 2h24v18H12V16zm12 4a1.2 1.2 0 00-1.2 1.2v6.4l-3.2-3.2a1.2 1.2 0 10-1.7 1.7l5.2 5.2a1.2 1.2 0 001.7 0l5.2-5.2a1.2 1.2 0 10-1.7-1.7l-3.2 3.2v-6.4A1.2 1.2 0 0024 20z" />
+                                    </svg>
+                                    <span>桌面</span>
+                                </div>
+                                <div class="sidebar-item">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M12 14a2 2 0 00-2 2v18a2 2 0 002 2h24a2 2 0 002-2V16a2 2 0 00-2-2H12zm0 2h24v18H12V16zm12 4a1.2 1.2 0 00-1.2 1.2v6.4l-3.2-3.2a1.2 1.2 0 10-1.7 1.7l5.2 5.2a1.2 1.2 0 001.7 0l5.2-5.2a1.2 1.2 0 10-1.7-1.7l-3.2 3.2v-6.4A1.2 1.2 0 0024 20z" />
+                                    </svg>
+                                    <span>下载</span>
+                                </div>
+                                <div class="sidebar-item">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M14 10a2 2 0 00-2 2v24a2 2 0 002 2h20a2 2 0 002-2V12a2 2 0 00-2-2H14zm0 2.4h20v23.2H14V12.4zM18 18a1.2 1.2 0 000 2.4h12a1.2 1.2 0 100-2.4H18zm0 6.4a1.2 1.2 0 000 2.4h12a1.2 1.2 0 100-2.4H18z" />
+                                    </svg>
+                                    <span>文档</span>
+                                </div>
+                                <div class="sidebar-item">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M34.8 12H13.2C11.4 12 10 13.4 10 15.2v17.6c0 1.8 1.4 3.2 3.2 3.2h21.6c1.8 0 3.2-1.4 3.2-3.2V15.2c0-1.8-1.4-3.2-3.2-3.2zM12.4 16h23.2v16.8H12.4V16z M16 20a1.2 1.2 0 000 2.4h16a1.2 1.2 0 100-2.4H16z" />
+                                    </svg>
+                                    <span>图片</span>
+                                </div>
+                                <div class="sidebar-item">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M12 14a2 2 0 00-2 2v18a2 2 0 002 2h24a2 2 0 002-2V16a2 2 0 00-2-2H12zm0 2h24v18H12V16zm6 6a6 6 0 100 12 6 6 0 000-12z" />
+                                    </svg>
+                                    <span>音乐</span>
+                                </div>
+                                <div class="sidebar-item">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M14 10a2 2 0 00-2 2v24a2 2 0 002 2h20a2 2 0 002-2V12a2 2 0 00-2-2H14zm0 2.4h20v23.2H14V12.4zM18 22a1.2 1.2 0 000 2.4h12a1.2 1.2 0 100-2.4H18zm0 6.4a1.2 1.2 0 000 2.4h8a1.2 1.2 0 100-2.4H18z" />
+                                    </svg>
+                                    <span>视频</span>
+                                </div>
+                            </div>
+
+                            <!-- 文件列表 -->
+                            <div class="file-view">
+                                <div class="table-header">
+                                    <div>名称</div>
+                                    <div>修改日期</div>
+                                    <div>类型</div>
+                                    <div>大小</div>
+                                </div>
+                                <div class="file-row">
+                                    <div class="file-name-cell">
+                                        📄
+                                        <span>1.txt</span>
+                                    </div>
+                                    <div>2026/8/11 13:40</div>
+                                    <div>文本文档</div>
+                                    <div>0 KB</div>
+                                </div>
+                                <div class="file-row active">
+                                    <div class="file-name-cell">
+                                        📄
+                                        <span>2.txt</span>
+                                    </div>
+                                    <div>2026/8/11 13:40</div>
+                                    <div>文本文档</div>
+                                    <div>0 KB</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 底部状态栏 -->
+                        <div class="status-bar">
+                            <span>2 个项目</span>
+                            <div class="view-switch">
+                                <div class="view-btn">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M14 12a1.2 1.2 0 00-1.2 1.2v23.6a1.2 1.2 0 001.2 1.2h20a1.2 1.2 0 001.2-1.2V13.2A1.2 1.2 0 0034 12H14zm1.2 2.4h17.6v21.2H15.2V14.4zM18 20a1.2 1.2 0 000 2.4h12a1.2 1.2 0 100-2.4H18zm0 6.4a1.2 1.2 0 000 2.4h12a1.2 1.2 0 100-2.4H18z" />
+                                    </svg>
+                                </div>
+                                <div class="view-btn">
+                                    <svg viewBox="0 0 48 48">
+                                        <path d="M14 14a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2v-6a2 2 0 00-2-2h-6zm0 2.4h6v6h-6v-6zm14-2.4a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2v-6a2 2 0 00-2-2h-6zm0 2.4h6v6h-6v-6zm-14 12a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2v-6a2 2 0 00-2-2h-6zm0 2.4h6v6h-6v-6zm14-2.4a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2v-6a2 2 0 00-2-2h-6zm0 2.4h6v6h-6v-6z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="window hidden" id="aka" style="width: 700px">
             <div class="window-inner">
                 <div class="titlebar">
@@ -819,6 +1035,9 @@
             }
 
             if (window.$scalingWindow) {
+                const computed = getComputedStyle($scalingWindow)
+                const minWidth = parseFloat(computed.minWidth) || 0
+                const minHeight = parseFloat(computed.minHeight) || 0
                 if (window.scalingEdge.includes('right')) {
                     let newWidth = Math.max(300, $scalingWindow.offsetWidth + event.movementX)
                     const windowX = getWindowDim($scalingWindow)[0];
@@ -832,7 +1051,7 @@
                 }
                 if (window.scalingEdge.includes('left')) {
                     const newWidth = $scalingWindow.offsetWidth - event.movementX
-                    if (newWidth > 300) {
+                    if (newWidth > 300 && newWidth > minWidth + 1) {
                         if (moveWindow($scalingWindow, event.movementX, 0)) {
                             $scalingWindow.style.width = newWidth + 'px'
                         }
@@ -840,7 +1059,7 @@
                 }
                 if (window.scalingEdge.includes('top')) {
                     const newHeight = $scalingWindow.offsetHeight - event.movementY
-                    if (newHeight > 200) {
+                    if (newHeight > 200 && newHeight > minHeight + 1) {
                         if (moveWindow($scalingWindow, 0, event.movementY)) {
                             $scalingWindow.style.height = newHeight + 'px'
                         }
