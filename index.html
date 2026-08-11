@@ -886,7 +886,10 @@
         </div>
         <div class="taskbar-right">
             <button type="button" class="theme-toggle" id="themeToggle" title="切换深浅色模式" aria-label="切换深浅色模式">☀️</button>
-            <span id="clock"></span>
+            <div style="display: flex; flex-direction: column; align-items: end;">
+                <span id="clock-time"></span>
+                <span id="clock-date"></span>
+            </div>
         </div>
     </footer>
 
@@ -907,9 +910,8 @@
 
         (function tick() {
             var d = new Date();
-            document.getElementById('clock').textContent =
-                d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) + '  ' +
-                d.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            document.getElementById('clock-time').textContent = d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('clock-date').textContent = d.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
             requestAnimationFrame(function () { setTimeout(tick, 1000 - Date.now() % 1000); });
         })();
 
