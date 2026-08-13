@@ -479,6 +479,35 @@ body {
   border-radius: 0;
 }
 
+.win-ctrl-btn.auto-expand {
+  width: auto;
+  padding: 0 15px;
+}
+
+.win-ctrl-btn.auto-expand .desc {
+  display: grid;
+  grid-template-columns: 0fr;
+  /* 起始宽度为 0 */
+  transition: grid-template-columns 0.5s ease;
+  /* 防止内容溢出 */
+  overflow: hidden;
+}
+
+.win-ctrl-btn.auto-expand .desc>* {
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.win-ctrl-btn.auto-expand:hover .desc {
+  grid-template-columns: 1fr;
+  width: auto;
+}
+
+.win-ctrl-btn.auto-expand:hover .desc>* {
+  opacity: 1;
+}
+
 .win-ctrl-btn:hover {
   background: var(--hover-bg);
 }
@@ -1168,21 +1197,28 @@ body {
 }
 
 @keyframes nb-float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-6px);
   }
 }
 
 @keyframes nb-shake {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: rotate(0deg);
   }
+
   25% {
     transform: rotate(-8deg);
   }
+
   75% {
     transform: rotate(8deg);
   }
@@ -1336,6 +1372,7 @@ body {
     transform: scale(0.94);
     opacity: 0.5;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
