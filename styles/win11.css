@@ -1614,19 +1614,32 @@ body {
   }
 
   .personalization-right-item-corner {
-    margin-left: 137px;
-    margin-top: -66px;
-    width: 50px;
-    height: 50px;
+    margin-left: 98px;
+    margin-top: -110px;
+    width: 90px;
+    height: 90px;
     transition: background-color 0.5s;
   }
 
   .personalization-right-item-corner-bar {
-    width: 37px;
-    height: 6px;
-    left: 7px;
-    top: 37px;
+    width: 24px;
+    height: 8px;
+    left: 55px;
+    top: 68px;
     transition: background-color 0.5s;
+  }
+
+  .personalization-right-item-corner::before {
+    content: '';
+    background: #FFFFFF;
+    width: 37px;
+    height: 1px;
+    display: block;
+    position: relative;
+    top: 10px;
+    left: 10px;
+    box-shadow: 33px 0 #FFFFFF, 0 10px #FFFFFF, 33px 10px #FFFFFF, 0 20px #FFFFFF, 33px 20px #FFFFFF, 0 30px #FFFFFF;
+    transition: background-color 0.5s, box-shadow 0.5s
   }
 }
 
@@ -1677,6 +1690,12 @@ body {
 .personalization-left[data-theme='light'] {
   .personalization-right-item-corner {
     background: #ffffff80;
+  }
+
+  .personalization-right-item-corner::before {
+    content: '';
+    background: #000000;
+    box-shadow: 33px 0 #000000, 0 10px #000000, 33px 10px #000000, 0 20px #000000, 33px 20px #000000, 0 30px #000000;
   }
 }
 
