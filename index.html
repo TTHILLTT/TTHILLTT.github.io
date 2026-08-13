@@ -1095,6 +1095,7 @@
         window.personalization = {
             backgroundID: 'win-bloom-dark',
             color: null,
+            backgroundURL: null,
         }
 
         function getTheme() {
@@ -1111,12 +1112,20 @@
             if (theme === 'light' && window.personalization.backgroundID === 'win-bloom-dark') {
                 changeBackground("/images/win-bloom-light.jpg")
                 window.personalization.backgroundID = "win-bloom-light"
+                savePersonalization()
             } else if (theme === 'dark' && window.personalization.backgroundID === 'win-bloom-light') {
                 changeBackground("/images/win-bloom-dark.jpg")
                 window.personalization.backgroundID = "win-bloom-dark"
+                savePersonalization()
             }
 
             updatePersonalizationPreview()
+        }
+
+        function updatePersonalizationPreview() {
+            const $personalizationPreview = document.getElementById('personalizationPreview');
+            $personalizationPreview.dataset.theme = getTheme();
+            $personalizationPreview.querySelector('.personalization-right-item-corner-bar').style.backgroundColor = window.personalization.color
         }
 
         document.getElementById('themeToggle').addEventListener('click', function () {
@@ -1128,9 +1137,18 @@
             changeTheme(next)
         });
 
+        const savedBackground = localStorage.getItem('background');
+        if (savedBackground) {
+            changeBackground(savedBackground, 0)
+            window.personalization.backgroundID = localStorage.getItem('backgroundID')
+            window.personalization.color = localStorage.getItem('accent')
+        }
+
         if (localStorage.getItem('theme') === 'light') {
             changeTheme('light');
         }
+
+        updatePersonalizationPreview();
 
         (function tick() {
             var d = new Date();
@@ -1441,9 +1459,10 @@
             const $personalizationRightItem = event.target.closest(".personalization-right-item");
             if ($personalizationRightItem) {
                 const $img = $personalizationRightItem.querySelector("img");
-                changeBackground($img.src)
+                changeBackground($img.getAttribute('src'))
                 window.personalization.backgroundID = $personalizationRightItem.dataset.background
                 window.personalization.color = $personalizationRightItem.querySelector('.personalization-right-item-corner-bar').style.backgroundColor
+                savePersonalization()
                 updatePersonalizationPreview()
                 if ($personalizationRightItem.dataset.theme === 'light') {
                     changeTheme('light')
@@ -1459,10 +1478,17 @@
             $coverDesktop.style.backgroundImage = $desktop.style.backgroundImage
             $desktop.style.backgroundImage = `url("${url}")`
             document.getElementById('personalizationPreview').querySelector('img').src = url
+            window.personalization.backgroundURL = url
             const anim = $coverDesktop.animate([
                 { opacity: 1 },
                 { opacity: 0 },
             ], { duration, easing: "ease" })
+        }
+
+        function savePersonalization() {
+            localStorage.setItem('background', window.personalization.backgroundURL);
+            localStorage.setItem('backgroundID', window.personalization.backgroundID);
+            localStorage.setItem('accent', window.personalization.color);
         }
 
         function getTaskbarIcon($window) {
@@ -1810,12 +1836,6 @@
                 }
             }
         })
-
-        function updatePersonalizationPreview() {
-            const $personalizationPreview = document.getElementById('personalizationPreview');
-            $personalizationPreview.dataset.theme = getTheme();
-            $personalizationPreview.querySelector('.personalization-right-item-corner-bar').style.backgroundColor = window.personalization.color
-        }
     </script>
 
     <script src="./scripts/tools.js"></script>
