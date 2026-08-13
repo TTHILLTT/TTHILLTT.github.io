@@ -1472,6 +1472,21 @@
             $window.dataset.status = "closed"
         }
 
+        function shakeWindow($window, intensity = 8, duration = 400) {
+            const $shakeEl = $window.querySelector('.window-inner') || $window;
+            finishRunningAnimations($window);
+
+            const steps = 8;
+            const keyframes = [];
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                const amp = intensity * (1 - t) * (i % 2 === 0 ? 1 : -1);
+                keyframes.push({ transform: `translateX(${amp}px)`, offset: t });
+            }
+
+            $shakeEl.animate(keyframes, { duration, easing: 'linear' });
+        }
+
         function openWindow($window) {
             const $taskbarIcon = getTaskbarIcon($window);
             switch ($window.dataset.status) {

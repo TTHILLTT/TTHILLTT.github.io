@@ -181,6 +181,9 @@
       el.winners.textContent = winners.length ? winners.join('、') : '无';
       el.guess.value = '';
       show(el.result);
+      if (typeof window.shakeWindow === 'function') {
+        window.shakeWindow(document.getElementById('numbomb'));
+      }
       return;
     }
     if (t <= state.min || t >= state.max) {
