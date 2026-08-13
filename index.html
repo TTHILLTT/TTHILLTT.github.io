@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/win11.css">
-    <script>var t = localStorage.getItem('theme') || 'dark'; document.documentElement.setAttribute('data-theme', t);</script>
+    <link rel="icon" href="/images/windhill.png">
     <title>Welcome!</title>
 </head>
 
 <body>
 
     <!-- Desktop Background -->
-    <div class="desktop"></div>
-    <div class="desktop light"></div>
+    <div class="desktop" id="desktop" style="background-image: url(/images/win-bloom-dark.jpg);"></div>
+    <div class="desktop light" id="coverDesktop"></div>
 
     <!-- Window -->
     <main class="content-overlay">
@@ -254,12 +254,21 @@
                                     <div>应用程序</div>
                                     <div>45 KB</div>
                                 </div>
+                                <div class="file-row" data-window="aka">
+                                    <div class="file-name-cell">
+                                        <div class="aka"><img src="/images/ICON163_1.ico" style="width: 16px; height: 16px;"></div>
+                                        <span>aka.exe</span>
+                                    </div>
+                                    <div>2026/8/13 09:03</div>
+                                    <div>应用程序</div>
+                                    <div>67 KB</div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- 底部状态栏 -->
                         <div class="status-bar">
-                            <span>7 个项目</span>
+                            <span>8 个项目</span>
                             <div class="view-switch">
                                 <div class="view-btn">
                                     <svg viewBox="0 0 48 48">
@@ -858,10 +867,106 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="window hidden" id="personalization" style="width: 700px">
+            <div class="window-inner">
+                <div class="titlebar">
+                    <div class="titlebar-left">
+                        <span class="titlebar-app-icon"><img src="images/ic_fluent_broom_sparkle_20_regular.svg" alt="personalization" class="invert-icon" style="width: 16px; height: 16px;"></span>
+                        <span class="titlebar-text">个性化</span>
+                    </div>
+                    <div class="titlebar-controls">
+                        <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
+                        <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
+                        <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+                    </div>
+                </div>
+
+                <div class="window-body">
+                    <div class="personalization-container">
+                        <div class="personalization-body">
+                            <div class="personalization-left">
+                                <img id="personalizationPreview" src="images/win-bloom-dark.jpg">
+                                <div class="personalization-right-item-corner">
+                                    <div class="personalization-right-item-corner-bar"></div>
+                                </div>
+                            </div>
+                            <div class="personalization-right-container">
+                                <p>选择要应用的主题</p>
+                                <div class="personalization-right">
+                                    <div class="personalization-right-item" data-theme="light" data-background="win-bloom-light">
+                                        <img src="images/win-bloom-light.jpg">
+                                        <div class="personalization-right-item-corner">
+                                            <div class="personalization-right-item-corner-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="personalization-right-item" data-background="win-bloom-dark">
+                                        <img src="images/win-bloom-dark.jpg">
+                                        <div class="personalization-right-item-corner">
+                                            <div class="personalization-right-item-corner-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="personalization-right-item" data-theme="light">
+                                        <img src="images/windows-11-bloom-in-black.jpg">
+                                        <div class="personalization-right-item-corner">
+                                            <div class="personalization-right-item-corner-bar" style="background-color: #808080;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="personalization-right-item">
+                                        <img src="images/Black-Bloom.jpg">
+                                        <div class="personalization-right-item-corner">
+                                            <div class="personalization-right-item-corner-bar" style="background-color: #FFFFFF;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="personalization-right-item" data-theme="light">
+                                        <img src="images/Ditto-Bloom-Light.jpg">
+                                        <div class="personalization-right-item-corner">
+                                            <div class="personalization-right-item-corner-bar" style="background-color: #64C5E9;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="personalization-right-item">
+                                        <img src="images/Ditto-Bloom.jpg">
+                                        <div class="personalization-right-item-corner">
+                                            <div class="personalization-right-item-corner-bar" style="background-color: #1D8BE8;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="personalization-right-item" data-theme="light">
+                                        <img src="images/windows-11-bloom-3840x2160-16795.png">
+                                        <div class="personalization-right-item-corner">
+                                            <div class="personalization-right-item-corner-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="personalization-right-item">
+                                        <img src="images/Bloom-wallpaper-OLED.jpg">
+                                        <div class="personalization-right-item-corner">
+                                            <div class="personalization-right-item-corner-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="personalization-right-item" data-theme="light">
+                                        <img src="images/vm-bloom-light.jpg">
+                                        <div class="personalization-right-item-corner">
+                                            <div class="personalization-right-item-corner-bar" style="background-color: #32B4F7;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="personalization-right-item">
+                                        <img src="images/vm-bloom.jpg">
+                                        <div class="personalization-right-item-corner">
+                                            <div class="personalization-right-item-corner-bar" style="background-color: #152AB2;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <div class="desktop-icons">
-        <a class="desktop-icon" href="./pages/socialMedias.html">
+        <a class="desktop-icon" ondblclick="openWindow(document.getElementById('explorer'))">
             <span class="d-icon"><img src="./images/ICON109_1.ico" alt="This PC" style="height: 48px;"></span>
             <span class="d-label">此电脑</span>
         </a>
@@ -878,11 +983,12 @@
             </a>
             <a class="taskbar-icon" title="Explorer" data-window="explorer"><img src="./images/ICON5325_1.ico" alt="explorer" style="height: 24px;"></a>
             <a class="taskbar-icon active" title="Home" data-window="home"><img src="./images/ICON51380_1.ico" alt="home" style="height: 24px;"></a>
-            <a class="taskbar-icon" id="github-button" title="GitHub" target="_blank" rel="noopener"><img src="./images/GitHub.svg" class="github-icon" alt="GitHub"></a>
+            <a class="taskbar-icon" id="github-button" title="GitHub" target="_blank" rel="noopener"><img src="./images/GitHub.svg" class="invert-icon" alt="GitHub"></a>
             <a class="taskbar-icon" title="Contact" data-window="contact"><img src="./images/FeedbackHubAppList.targetsize-96_altform-unplated.png" alt="Contact" style="height: 24px;"></a>
             <a class="taskbar-icon" title="NGGYU" data-window="nggyu"><img src="./images/MediaPlayerAppList.targetsize-256_altform-unplated.png" alt="NGGYU" style="height: 24px;"></a>
             <a class="taskbar-icon" title="Tools" data-window="tools"><img src="./images/ICON1306_1.ico" alt="tools" style="height: 24px;"></a>
             <a class="taskbar-icon" title="aka" data-window="aka"><img src="./images/ICON163_1.ico" alt="aka" style="height: 24px;"></a>
+            <a class="taskbar-icon" title="personalization" data-window="personalization"><img src="./images/ic_fluent_broom_sparkle_20_regular.svg" class="invert-icon" alt="personalization" style="height: 24px;"></a>
         </div>
         <div class="taskbar-right">
             <button type="button" class="theme-toggle" id="themeToggle" title="切换深浅色模式" aria-label="切换深浅色模式">☀️</button>
@@ -894,19 +1000,42 @@
     </footer>
 
     <script>
-        (function () {
-            var theme = document.documentElement.getAttribute('data-theme');
-            var btn = document.getElementById('themeToggle');
-            if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-        })();
+
+        window.currentBackground = 'win-bloom-dark'
+        window.currentColor = null
+
+        function getTheme() {
+            return document.documentElement.getAttribute('data-theme');
+        }
+
+        function changeTheme(theme) {
+            const btn = document.getElementById('themeToggle');
+            document.documentElement.setAttribute('data-theme', theme);
+            btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('theme', theme);
+
+            const $desktop = document.getElementById("desktop")
+            if (theme === 'light' && window.currentBackground === 'win-bloom-dark') {
+                changeBackground("/images/win-bloom-light.jpg")
+                window.currentBackground = "win-bloom-light"
+            } else if (theme === 'dark' && window.currentBackground === 'win-bloom-light') {
+                changeBackground("/images/win-bloom-dark.jpg")
+                window.currentBackground = "win-bloom-dark"
+            }
+        }
 
         document.getElementById('themeToggle').addEventListener('click', function () {
-            var current = document.documentElement.getAttribute('data-theme');
-            var next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            this.textContent = next === 'dark' ? '☀️' : '🌙';
-            localStorage.setItem('theme', next);
+            var current = getTheme()
+            var next = {
+                light: 'dark',
+                dark: 'light',
+            }[current];
+            changeTheme(next)
         });
+
+        if (localStorage.getItem('theme') === 'light') {
+            changeTheme('light');
+        }
 
         (function tick() {
             var d = new Date();
@@ -1213,7 +1342,30 @@
                     }
                 }
             }
+
+            const $personalizationRightItem = event.target.closest(".personalization-right-item");
+            if ($personalizationRightItem) {
+                const $img = $personalizationRightItem.querySelector("img");
+                changeBackground($img.src)
+                window.currentBackground = $personalizationRightItem.dataset.background
+                if ($personalizationRightItem.dataset.theme === 'light') {
+                    changeTheme('light')
+                } else {
+                    changeTheme('dark')
+                }
+            }
         })
+
+        function changeBackground(url, duration = 500) {
+            const $desktop = document.getElementById("desktop")
+            const $coverDesktop = document.getElementById("coverDesktop")
+            $coverDesktop.style.backgroundImage = $desktop.style.backgroundImage
+            $desktop.style.backgroundImage = `url("${url}")`
+            const anim = $coverDesktop.animate([
+                { opacity: 1 },
+                { opacity: 0 },
+            ], { duration, easing: "ease" })
+        }
 
         function getTaskbarIcon($window) {
             const $taskbarIcon = document.querySelector(`.taskbar-icon[data-window=${$window.id}]`);
@@ -1545,6 +1697,8 @@
                 }
             }
         })
+
+        // openWindow(document.getElementById("personalization"))
     </script>
 
     <script src="./scripts/tools.js"></script>

@@ -111,12 +111,8 @@
 
   --window-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.03) 100%);
 
-  .github-icon {
+  .invert-icon {
     filter: invert(0);
-  }
-
-  .desktop.light {
-    opacity: 1;
   }
 
   #explorer {
@@ -253,8 +249,7 @@ body {
 .desktop {
   position: fixed;
   inset: 0;
-  background:
-    url("/images/win-bloom-dark.jpg");
+  background: url("/images/win-bloom-dark.jpg");
   background-position: center;
   background-size: cover;
   z-index: 0;
@@ -263,7 +258,6 @@ body {
 .desktop.light {
   opacity: 0;
   background-image: url(/images/win-bloom-light.jpg);
-  transition: opacity 0.5s;
 }
 
 .desktop::after {
@@ -1217,7 +1211,7 @@ body {
 }
 
 
-.github-icon {
+.invert-icon {
   height: 24px;
   filter: invert(1);
   transition: all 0.12s var(--ease-out), filter 0.5s;
@@ -1597,4 +1591,98 @@ body {
     height: 20px;
     fill: #334155;
   }
+}
+
+.personalization-container {
+  container-type: inline-size;
+}
+
+.personalization-body {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  width: 100%;
+}
+
+.personalization-left {
+  width: 200px;
+
+  img {
+    width: 100%;
+    border: 5px solid black;
+    border-radius: 10px;
+  }
+
+  .personalization-right-item-corner {
+    margin-left: 137px;
+    margin-top: -66px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .personalization-right-item-corner-bar {
+    width: 37px;
+    height: 6px;
+    left: 7px;
+    top: 37px;
+  }
+}
+
+.personalization-right {
+  display: grid;
+  grid-template-columns: 100px 100px;
+  height: fit-content;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+@container (width > 330px) {
+  .personalization-right {
+    grid-template-columns: 100px 100px 100px
+  }
+
+  .personalization-right-container {
+    width: 330px;
+  }
+}
+
+@container (width > 580px) {
+  .personalization-body {
+    flex-direction: row;
+  }
+}
+
+.personalization-right-item {
+  img {
+    width: 100%;
+    height: 63px;
+    border-radius: 10px;
+  }
+}
+
+.personalization-right-item-corner {
+  position: absolute;
+  background: #19191980;
+  width: 30px;
+  height: 30px;
+  margin-left: 64px;
+  margin-top: -40px;
+  border-radius: 5px;
+  -webkit-backdrop-filter: blur(5px) contrast(0.7) brightness(1.2);
+  backdrop-filter: blur(5px) contrast(0.7) brightness(1.2);
+}
+
+.personalization-right-item[data-theme='light'] .personalization-right-item-corner {
+  background: #ffffff80;
+}
+
+.personalization-right-item-corner-bar {
+  background: #0078D4;
+  width: 16px;
+  height: 6px;
+  left: 7px;
+  top: 18px;
+  display: block;
+  position: relative;
+  border-radius: 2px;
 }
