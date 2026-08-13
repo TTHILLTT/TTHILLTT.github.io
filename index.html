@@ -967,7 +967,7 @@
             <div class="window-inner">
                 <div class="titlebar">
                     <div class="titlebar-left">
-                        <span class="titlebar-app-icon"><img src="images/ic_fluent_broom_sparkle_20_regular.svg" alt="personalization" class="invert-icon" style="width: 16px; height: 16px;"></span>
+                        <span class="titlebar-app-icon">💣</span>
                         <span class="titlebar-text">数字炸弹小游戏</span>
                     </div>
                     <div class="titlebar-controls">
@@ -978,7 +978,62 @@
                 </div>
 
                 <div class="window-body">
+                    <div class="nb-panel" id="nb-setup">
+                        <div class="nb-hero">
+                            <div class="nb-bomb">💣</div>
+                            <h1>数字炸弹</h1>
+                            <p class="nb-desc">在数字范围内猜测数字，猜中炸弹数字的玩家将受到惩罚！</p>
+                        </div>
+                        <div class="nb-row">
+                            <label for="nb-min">最小数字</label>
+                            <input type="number" id="nb-min" value="1">
+                        </div>
+                        <div class="nb-row">
+                            <label for="nb-max">最大数字</label>
+                            <input type="number" id="nb-max" value="100">
+                        </div>
+                        <div class="nb-msg" id="nb-setup-msg"></div>
+                        <button type="button" class="btn-win11 accent" id="nb-setup-btn">开始游戏</button>
+                    </div>
 
+                    <div class="nb-panel hidden" id="nb-players">
+                        <div class="nb-hero">
+                            <h1>添加玩家</h1>
+                            <p class="nb-desc">输入玩家名称，按回车或点击“添加”加入</p>
+                        </div>
+                        <div class="nb-input-row">
+                            <input type="text" id="nb-name" placeholder="输入玩家名称" maxlength="12">
+                            <button type="button" class="btn-win11" id="nb-add-btn">添加</button>
+                        </div>
+                        <ul class="nb-list" id="nb-list"></ul>
+                        <div class="nb-msg" id="nb-players-msg"></div>
+                        <button type="button" class="btn-win11 accent" id="nb-start-btn">开始游戏</button>
+                    </div>
+
+                    <div class="nb-panel hidden" id="nb-game">
+                        <div class="nb-range" id="nb-range">1 ~ 100</div>
+                        <div class="nb-meta">
+                            <span>剩余玩家 <b id="nb-remaining">0</b></span>
+                            <span id="nb-turn"></span>
+                        </div>
+                        <div class="nb-input-row">
+                            <input type="text" id="nb-guess" inputmode="numeric" autocomplete="off" placeholder="输入范围内的数字">
+                            <button type="button" class="btn-win11 accent" id="nb-guess-btn">提交答案</button>
+                        </div>
+                        <div class="nb-msg" id="nb-msg"></div>
+                        <div class="nb-history" id="nb-history"></div>
+                    </div>
+
+                    <div class="nb-panel hidden" id="nb-result">
+                        <div class="nb-hero">
+                            <div class="nb-boom">💥</div>
+                            <h1>炸弹爆炸！</h1>
+                        </div>
+                        <div class="nb-result-line">赢家: <b id="nb-winners"></b></div>
+                        <div class="nb-result-line nb-loser-line">输家: <b id="nb-loser"></b></div>
+                        <div class="nb-mt"></div>
+                        <button type="button" class="btn-win11 accent" id="nb-restart-btn">再来一局</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1009,6 +1064,7 @@
             <a class="taskbar-icon" title="Tools" data-window="tools"><img src="./images/ICON1306_1.ico" alt="tools" style="height: 24px;"></a>
             <a class="taskbar-icon" title="aka" data-window="aka"><img src="./images/ICON163_1.ico" alt="aka" style="height: 24px;"></a>
             <a class="taskbar-icon" title="personalization" data-window="personalization"><img src="./images/ic_fluent_broom_sparkle_20_regular.svg" class="invert-icon" alt="personalization" style="height: 24px;"></a>
+            <a class="taskbar-icon" title="numbomb" data-window="numbomb">💣</a>
         </div>
         <div class="taskbar-right">
             <button type="button" class="theme-toggle" id="themeToggle" title="切换深浅色模式" aria-label="切换深浅色模式">☀️</button>
@@ -1732,6 +1788,7 @@
     </script>
 
     <script src="./scripts/tools.js"></script>
+    <script src="./scripts/numbomb.js"></script>
 </body>
 
 </html>

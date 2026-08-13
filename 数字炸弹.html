@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字炸弹游戏</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>数字炸弹游戏</h1>
+    <p>在数字范围内猜测数字，猜中炸弹数字的玩家将受到惩罚！</p>
+
+    <div id="setup-card" class="card">
+        <h2>游戏设置</h2>
+        <p><label>最小数字<input type="number" id="min-range" value="1"></label></p>
+        <p><label>最大数字<input type="number" id="max-range" value="100"></label></p>
+        <p>
+            <button id="setup-btn">开始游戏</button>
+        </p>
+    </div>
+
+    <div id="players-card" class="card hidden">
+        <h2>添加玩家</h2>
+        <p><input type="text" id="player-name" placeholder="输入玩家名称">
+            <button id="add-player-btn">添加玩家</button>
+        </p>
+        <ul id="player-list"></ul>
+        <p>
+            <button id="start-game-btn">开始游戏</button>
+        </p>
+    </div>
+
+    <div id="game-card" class="card hidden">
+        <h2>数字炸弹</h2>
+        <p class="range-display" id="current-range">1 ~ 100</p>
+        <p>剩余玩家: <span id="remaining-players">0</span></p>
+        <p class="current-player" id="current-player"></p>
+        <p><input type="text" id="guess-input" placeholder="输入范围内的数字">
+            <button id="guess-btn">提交答案</button>
+        </p>
+    </div>
+
+    <div id="result-card" class="card hidden">
+        <h2>游戏结果</h2>
+        <h3>炸弹爆炸！</h3>
+        <p class="winner">赢家: <span id="winners"></span></p>
+        <p class="loser">输家: <span id="loser"></span></p>
+        <p>
+            <button id="restart-btn">重新开始</button>
+        </p>
+    </div>
+</div>
+
+<script>
+    const g = (e) => document.getElementById(e), s = g('setup-card'), p = g('players-card'), m = g('game-card'),
+        r = g('result-card'), l = g('player-list');
+    let n = 1, x = 100, b = 0, a = [], c = 0;
+
+    function addPlayer() {
+        const e = g('player-name').value.trim();
+        a.push(e);
+        const t = document.createElement('li');
+        t.className = 'player-tag', t.textContent = e, l.appendChild(t), g('player-name').value = '', g('remaining-players').textContent = a.length
+    }
+
+    function submitGuess() {
+        const e = g('guess-input').value.trim();
+        if ("1e45141919810" === e) return alert(`炸弹数字是: ${b}`), void (g('guess-input').value = '');
+        const t = parseInt(e);
+        if (t === b) {
+            const e = a[c], t = a.filter((a, t) => t !== c);
+            return g('winners').textContent = t.join(', '), g('loser').textContent = e, void (m.classList.add('hidden'), r.classList.remove('hidden'))
+        }
+        if ((t < b && t > n ? n = t : t > b && t < x ? x = t : alert('超出范围！'), g('guess-input').value = '', t === b)) return;
+        g('current-range').textContent = `${n} ~ ${x}`, c = (c + 1) % a.length, g('current-player').textContent = `${a[c]}的回合`, g('guess-input').value = ''
+    }
+
+    g('setup-btn').addEventListener('click', (() => {
+        n = parseInt(g('min-range').value) || 1, x = parseInt(g('max-range').value) || 100, a = [], l.innerHTML = '', s.classList.add('hidden'), p.classList.remove('hidden')
+    })), g('add-player-btn').addEventListener('click', addPlayer), g('start-game-btn').addEventListener('click', (() => {
+        b = Math.floor(Math.random() * (x - n + 1)) + n, c = 0, g('current-range').textContent = `${n} ~ ${x}`, g('current-player').textContent = `${a[0]}的回合`, p.classList.add('hidden'), m.classList.remove('hidden')
+    })), g('guess-btn').addEventListener('click', submitGuess), g('restart-btn').addEventListener('click', (() => {
+        r.classList.add('hidden'), s.classList.remove('hidden')
+    })), g('player-name').addEventListener('keypress', (e => 'Enter' === e.key && addPlayer())), g('guess-input').addEventListener('keypress', (e => 'Enter' === e.key && submitGuess()));
+</script>
+</body>
+
+</html>
