@@ -886,8 +886,8 @@
                 <div class="window-body">
                     <div class="personalization-container">
                         <div class="personalization-body">
-                            <div class="personalization-left">
-                                <img id="personalizationPreview" src="images/win-bloom-dark.jpg">
+                            <div id="personalizationPreview" class="personalization-left">
+                                <img src="images/win-bloom-dark.jpg">
                                 <div class="personalization-right-item-corner">
                                     <div class="personalization-right-item-corner-bar"></div>
                                 </div>
@@ -1000,9 +1000,10 @@
     </footer>
 
     <script>
-
-        window.currentBackground = 'win-bloom-dark'
-        window.currentColor = null
+        window.personalization = {
+            backgroundID: 'win-bloom-dark',
+            color: null,
+        }
 
         function getTheme() {
             return document.documentElement.getAttribute('data-theme');
@@ -1015,13 +1016,15 @@
             localStorage.setItem('theme', theme);
 
             const $desktop = document.getElementById("desktop")
-            if (theme === 'light' && window.currentBackground === 'win-bloom-dark') {
+            if (theme === 'light' && window.personalization.backgroundID === 'win-bloom-dark') {
                 changeBackground("/images/win-bloom-light.jpg")
-                window.currentBackground = "win-bloom-light"
-            } else if (theme === 'dark' && window.currentBackground === 'win-bloom-light') {
+                window.personalization.backgroundID = "win-bloom-light"
+            } else if (theme === 'dark' && window.personalization.backgroundID === 'win-bloom-light') {
                 changeBackground("/images/win-bloom-dark.jpg")
-                window.currentBackground = "win-bloom-dark"
+                window.personalization.backgroundID = "win-bloom-dark"
             }
+
+            updatePersonalizationPreview()
         }
 
         document.getElementById('themeToggle').addEventListener('click', function () {
@@ -1347,7 +1350,9 @@
             if ($personalizationRightItem) {
                 const $img = $personalizationRightItem.querySelector("img");
                 changeBackground($img.src)
-                window.currentBackground = $personalizationRightItem.dataset.background
+                window.personalization.backgroundID = $personalizationRightItem.dataset.background
+                window.personalization.color = $personalizationRightItem.querySelector('.personalization-right-item-corner-bar').style.backgroundColor
+                updatePersonalizationPreview()
                 if ($personalizationRightItem.dataset.theme === 'light') {
                     changeTheme('light')
                 } else {
@@ -1361,6 +1366,7 @@
             const $coverDesktop = document.getElementById("coverDesktop")
             $coverDesktop.style.backgroundImage = $desktop.style.backgroundImage
             $desktop.style.backgroundImage = `url("${url}")`
+            document.getElementById('personalizationPreview').querySelector('img').src = url
             const anim = $coverDesktop.animate([
                 { opacity: 1 },
                 { opacity: 0 },
@@ -1698,7 +1704,13 @@
             }
         })
 
-        // openWindow(document.getElementById("personalization"))
+        function updatePersonalizationPreview() {
+            const $personalizationPreview = document.getElementById('personalizationPreview');
+            $personalizationPreview.dataset.theme = getTheme();
+            $personalizationPreview.querySelector('.personalization-right-item-corner-bar').style.backgroundColor = window.personalization.color
+        }
+
+        openWindow(document.getElementById("personalization"))
     </script>
 
     <script src="./scripts/tools.js"></script>
