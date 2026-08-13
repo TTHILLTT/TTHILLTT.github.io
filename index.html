@@ -963,6 +963,26 @@
             </div>
         </div>
 
+        <div class="window hidden" id="numbomb" style="width: 700px">
+            <div class="window-inner">
+                <div class="titlebar">
+                    <div class="titlebar-left">
+                        <span class="titlebar-app-icon"><img src="images/ic_fluent_broom_sparkle_20_regular.svg" alt="personalization" class="invert-icon" style="width: 16px; height: 16px;"></span>
+                        <span class="titlebar-text">数字炸弹小游戏</span>
+                    </div>
+                    <div class="titlebar-controls">
+                        <button type="button" class="win-ctrl-btn minimize" aria-label="Minimize">&#x2014;</button>
+                        <button type="button" class="win-ctrl-btn maximize" aria-label="Maximize">&#x25A1;</button>
+                        <button type="button" class="win-ctrl-btn close" aria-label="Close">&#x2715;</button>
+                    </div>
+                </div>
+
+                <div class="window-body">
+
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <div class="desktop-icons">
@@ -1709,8 +1729,6 @@
             $personalizationPreview.dataset.theme = getTheme();
             $personalizationPreview.querySelector('.personalization-right-item-corner-bar').style.backgroundColor = window.personalization.color
         }
-
-        openWindow(document.getElementById("personalization"))
     </script>
 
     <script src="./scripts/tools.js"></script>
