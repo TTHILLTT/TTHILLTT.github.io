@@ -186,14 +186,14 @@
       }
       return;
     }
-    if (t <= state.min || t >= state.max) {
+    if (t < state.min || t > state.max) {
       setMsg(`超出当前范围 ${state.min} ~ ${state.max}`);
       return;
     }
     if (t < state.bomb) {
-      state.min = t;
+      state.min = t + 1;
     } else {
-      state.max = t;
+      state.max = t - 1;
     }
     addHistory(state.players[state.turn], t);
     state.turn = (state.turn + 1) % state.players.length;
