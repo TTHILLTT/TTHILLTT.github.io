@@ -1102,24 +1102,79 @@
             return document.documentElement.getAttribute('data-theme');
         }
 
-        function changeTheme(theme) {
-            const btn = document.getElementById('themeToggle');
-            document.documentElement.setAttribute('data-theme', theme);
-            btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-            localStorage.setItem('theme', theme);
+        // ===== 主题/壁纸切换：预加载 + 同步动画（性能优化） =====
+        const bgImageCache = Object.create(null);
+        let bgAnimSeq = 0;   // 壁纸切换序号：快速连点时只让最后一次生效
+        let themeSeq = 0;    // 主题切换序号：快速连点时只让最后一次生效
 
-            const $desktop = document.getElementById("desktop")
-            if (theme === 'light' && window.personalization.backgroundID === 'win-bloom-dark') {
-                changeBackground("/images/win-bloom-light.jpg")
-                window.personalization.backgroundID = "win-bloom-light"
-                savePersonalization()
-            } else if (theme === 'dark' && window.personalization.backgroundID === 'win-bloom-light') {
-                changeBackground("/images/win-bloom-dark.jpg")
-                window.personalization.backgroundID = "win-bloom-dark"
-                savePersonalization()
+        // 预加载壁纸（带缓存），确保切换动画开始时图片已解码，避免首帧卡顿/闪烁
+        function preloadBackground(url) {
+            if (!bgImageCache[url]) {
+                bgImageCache[url] = new Promise((resolve) => {
+                    const img = new Image();
+                    const done = (ok) => {
+                        img.onload = null;
+                        img.onerror = null;
+                        resolve(ok);
+                    };
+                    img.onload = () => done(true);
+                    img.onerror = () => done(false);
+                    img.src = url;
+                });
             }
+            return bgImageCache[url];
+        }
 
-            updatePersonalizationPreview()
+        // ===== 主题/壁纸切换：合并调度 =====
+        // 快速连点时把 120ms 内的切换请求合并为一次执行，避免 CSS 过渡反复中断-重启
+        // 造成动画叠加；最后一次切换仍保留完整渐变效果
+        let pendingApply = null;
+        let applyTimer = null;
+        const APPLY_DELAY = 120;
+
+        function scheduleApply(fn) {
+            pendingApply = fn;
+            if (applyTimer) clearTimeout(applyTimer);
+            applyTimer = setTimeout(() => {
+                applyTimer = null;
+                const f = pendingApply;
+                pendingApply = null;
+                if (f) f();
+            }, APPLY_DELAY);
+        }
+
+        function setThemeAttribute(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.getElementById('themeToggle').textContent = theme === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('theme', theme);
+        }
+
+        function changeTheme(theme) {
+            const seq = ++themeSeq;
+
+            // 深/浅主题与默认壁纸联动：仅当当前是配套默认壁纸时一起切换壁纸
+            const linkedBackground =
+                (theme === 'light' && window.personalization.backgroundID === 'win-bloom-dark') ? "/images/win-bloom-light.jpg" :
+                (theme === 'dark' && window.personalization.backgroundID === 'win-bloom-light') ? "/images/win-bloom-dark.jpg" : null;
+
+            const apply = () => {
+                if (seq !== themeSeq) return; // 已被更新的切换取代
+                setThemeAttribute(theme);
+                if (linkedBackground) {
+                    window.personalization.backgroundID = theme === 'light' ? 'win-bloom-light' : 'win-bloom-dark';
+                    window.personalization.backgroundURL = linkedBackground;
+                    savePersonalization();
+                    changeBackground(linkedBackground); // 已预加载，颜色过渡与壁纸淡化同步开始
+                }
+                updatePersonalizationPreview();
+            };
+
+            if (linkedBackground) {
+                // 壁纸就绪后再一起切换，保证颜色渐变与壁纸淡化同时开始
+                preloadBackground(linkedBackground).then(apply);
+            } else {
+                apply();
+            }
         }
 
         function updatePersonalizationPreview() {
@@ -1134,7 +1189,7 @@
                 light: 'dark',
                 dark: 'light',
             }[current];
-            changeTheme(next)
+            scheduleApply(function () { changeTheme(next) })
         });
 
         const savedBackground = localStorage.getItem('background');
@@ -1458,31 +1513,64 @@
 
             const $personalizationRightItem = event.target.closest(".personalization-right-item");
             if ($personalizationRightItem) {
+                const seq = ++themeSeq;
                 const $img = $personalizationRightItem.querySelector("img");
-                changeBackground($img.getAttribute('src'))
+                const backgroundURL = $img.getAttribute('src');
+                const targetTheme = $personalizationRightItem.dataset.theme === 'light' ? 'light' : 'dark';
+
+                // 状态立即记录（不等待合并后的应用）
                 window.personalization.backgroundID = $personalizationRightItem.dataset.background
                 window.personalization.color = $personalizationRightItem.querySelector('.personalization-right-item-corner-bar').style.backgroundColor
+                window.personalization.backgroundURL = backgroundURL
                 savePersonalization()
-                updatePersonalizationPreview()
-                if ($personalizationRightItem.dataset.theme === 'light') {
-                    changeTheme('light')
-                } else {
-                    changeTheme('dark')
-                }
+
+                // 视觉应用走合并调度：快速连点只执行最后一次，避免过渡反复中断-重启；
+                // 壁纸就绪后同步应用主题与壁纸，颜色渐变与壁纸淡化同时开始
+                scheduleApply(() => {
+                    if (seq !== themeSeq) return;
+                    preloadBackground(backgroundURL).then(() => {
+                        if (seq !== themeSeq) return;
+                        if (targetTheme !== getTheme()) {
+                            setThemeAttribute(targetTheme)
+                        }
+                        changeBackground(backgroundURL) // 已预加载，立即开始淡化
+                        updatePersonalizationPreview()
+                    });
+                });
             }
         })
 
         function changeBackground(url, duration = 500) {
-            const $desktop = document.getElementById("desktop")
-            const $coverDesktop = document.getElementById("coverDesktop")
-            $coverDesktop.style.backgroundImage = $desktop.style.backgroundImage
-            $desktop.style.backgroundImage = `url("${url}")`
-            document.getElementById('personalizationPreview').querySelector('img').src = url
-            window.personalization.backgroundURL = url
-            const anim = $coverDesktop.animate([
-                { opacity: 1 },
-                { opacity: 0 },
-            ], { duration, easing: "ease" })
+            const seq = ++bgAnimSeq;
+            preloadBackground(url).then((ok) => {
+                if (seq !== bgAnimSeq) return; // 已被更新的壁纸切换取代，本次作废
+
+                const $desktop = document.getElementById("desktop")
+                const $coverDesktop = document.getElementById("coverDesktop")
+                $coverDesktop.style.backgroundImage = $desktop.style.backgroundImage
+                $desktop.style.backgroundImage = `url("${url}")`
+                document.getElementById('personalizationPreview').querySelector('img').src = url
+                window.personalization.backgroundURL = url
+
+                if (!ok || duration <= 0) {
+                    // 加载失败或无需动画：切换直接完成，覆盖层不保留位图
+                    $coverDesktop.style.backgroundImage = 'none';
+                    return;
+                }
+
+                // 取消旧的淡化动画，避免快速连点时多个动画叠加
+                $coverDesktop.getAnimations().forEach(a => a.cancel());
+                const anim = $coverDesktop.animate([
+                    { opacity: 1 },
+                    { opacity: 0 },
+                ], { duration, easing: "ease" });
+                // 淡化结束后清空覆盖层背景，释放旧壁纸位图引用
+                anim.onfinish = () => {
+                    if (seq === bgAnimSeq) {
+                        $coverDesktop.style.backgroundImage = 'none';
+                    }
+                };
+            });
         }
 
         function savePersonalization() {

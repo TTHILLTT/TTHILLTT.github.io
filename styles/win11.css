@@ -258,6 +258,8 @@ body {
 .desktop.light {
   opacity: 0;
   background-image: url(/images/win-bloom-light.jpg);
+  /* 壁纸交叉淡化在合成器上完成，避免主线程逐帧重绘 */
+  will-change: opacity;
 }
 
 .desktop::after {
@@ -266,6 +268,9 @@ body {
   inset: 0;
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 800 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E") 0 0 / 400px 300px repeat;
   pointer-events: none;
+  /* 噪声纹理提升为独立合成层：背景变化时不再逐帧重绘 feTurbulence */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* ===== Desktop Icons ===== */
@@ -380,6 +385,13 @@ body {
   .window-inner {
     opacity: 0;
   }
+}
+
+/* hidden 窗口不可见：其内部元素无需任何过渡，避免无效过渡占用主线程
+   （工具箱等窗口即使隐藏，其 DOM 仍在，主题切换时会产生大量无意义的过渡） */
+.window.hidden,
+.window.hidden * {
+  transition: none !important;
 }
 
 .window.hidden.animation .window-inner {
